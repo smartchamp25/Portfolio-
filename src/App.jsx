@@ -51,11 +51,11 @@ function App() {
     {
       title: 'The wild Oasis',
       description: 'The Wild Oasis is a luxury cabin resort management system built with React, Vite, and Supabase. It streamlines hotel operations by managing cabin inventory, guest bookings, check-ins/check-outs, and business analytics—all through a modern admin dashboard. Key features include interactive charts for sales/occupancy tracking, customizable settings, and secure authentication. The tech stack combines React Query for data fetching, Styled Components for styling, and Recharts for visualizations—delivering a polished, feature-complete solution for hospitality management.',
-      tags: ['React', 'JavaScript', 'CSS', 'HTML', 'Tailwind'],
+      tags: ['React', 'JavaScript', 'CSS', 'HTML', 'Tailwind', 'Supabase'],
       image: cabinImage,
       isRealImage: true,
       link: '#',
-      github: '#',
+      github: 'https://github.com/smartchamp25',
       featured: true
     },
     {
