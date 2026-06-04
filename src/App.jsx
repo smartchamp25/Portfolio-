@@ -146,7 +146,6 @@ function App() {
               onClick={() => scrollToSection(item.toLowerCase())}
               className={`nav-item-unique ${activeSection === item.toLowerCase() ? 'active' : ''}`}
             >
-              <span className="nav-number">0{['About', 'Skills', 'Projects', 'Contact'].indexOf(item) + 1}</span>
               {item}
             </button>
           ))}
@@ -220,7 +219,6 @@ function App() {
       {/* About Section */}
       <section id="about" className="about-unique">
         <div className="section-header-unique">
-          <span className="section-number">01.</span>
           <h2 className="section-title-unique">About Me</h2>
           <div className="section-line"></div>
         </div>
@@ -273,7 +271,6 @@ function App() {
       {/* Skills Section */}
       <section id="skills" className="skills-unique">
         <div className="section-header-unique">
-          <span className="section-number">02.</span>
           <h2 className="section-title-unique">My Skills</h2>
           <div className="section-line"></div>
         </div>
@@ -304,7 +301,6 @@ function App() {
       {/* Projects Section */}
       <section id="projects" className="projects-unique">
         <div className="section-header-unique">
-          <span className="section-number">03.</span>
           <h2 className="section-title-unique">Featured Projects</h2>
           <div className="section-line"></div>
         </div>
@@ -351,7 +347,6 @@ function App() {
       {/* Contact Section */}
       <section id="contact" className="contact-unique">
         <div className="section-header-unique">
-          <span className="section-number">04.</span>
           <h2 className="section-title-unique">Let's Connect</h2>
           <div className="section-line"></div>
         </div>
