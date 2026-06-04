@@ -758,6 +758,10 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 450px;
+  position: sticky;
+  top: 5rem;
+  z-index: 10;
+  margin-bottom: 2rem;
 }
 
 .featured-tag-unique {
@@ -770,7 +774,7 @@ body {
   border-radius: 50px;
   font-size: 0.75rem;
   font-weight: 600;
-  z-index: 10;
+  z-index: 1;
 }
 
 .project-visual {
@@ -785,6 +789,8 @@ body {
 
 .project-card-unique.featured .project-visual {
   min-height: 100%;
+  max-height: 450px;
+  overflow: hidden;
 }
 
 .project-visual img {
@@ -809,6 +815,27 @@ body {
 
 .project-card-unique.featured .project-info {
   justify-content: center;
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.project-card-unique.featured .project-info::-webkit-scrollbar {
+  width: 6px;
+}
+
+.project-card-unique.featured .project-info::-webkit-scrollbar-track {
+  background: rgba(124, 58, 237, 0.1);
+  border-radius: 3px;
+}
+
+.project-card-unique.featured .project-info::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.5);
+  border-radius: 3px;
+}
+
+.project-card-unique.featured .project-info::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.8);
 }
 
 .project-info h3 {
@@ -981,10 +1008,17 @@ body {
   .project-card-unique.featured {
     grid-template-columns: 1fr;
     min-height: auto;
+    position: relative;
+    top: auto;
   }
 
   .project-card-unique.featured .project-visual {
     min-height: 250px;
+    max-height: 250px;
+  }
+
+  .project-card-unique.featured .project-info {
+    max-height: none;
   }
 }
 
