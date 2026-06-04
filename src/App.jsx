@@ -58,7 +58,8 @@ function App() {
     { name: 'JavaScript', level: 85, icon: '📜', color: '#F7DF1E' },
     { name: 'HTML/CSS', level: 80, icon: '🎨', color: '#E34F26' },
     { name: 'Tailwind CSS', level: 75, icon: '💨', color: '#06B6D4' },
-    { name: 'Git', level: 70, icon: '🌿', color: '#F05032' },
+    { name: 'Supabase', level: 70, icon: '🗄️', color: '#3ECF8E' },
+    { name: 'Git', level: 65, icon: '🌿', color: '#F05032' },
   ]
 
   const projects = [
