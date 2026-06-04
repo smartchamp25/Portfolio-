@@ -309,10 +309,14 @@ function App() {
           <div className="section-line"></div>
         </div>
 
+        {/* Fixed Featured Badge */}
+        {projects.some(p => p.featured) && (
+          <div className="featured-tag-unique">⭐ Featured Project</div>
+        )}
+
         <div className="projects-container-unique">
           {projects.map((project) => (
             <div key={project.title} className={`project-card-unique ${project.featured ? 'featured' : ''}`}>
-              {project.featured && <div className="featured-tag-unique">Featured Project</div>}
 
               <div className="project-visual">
                 {project.isRealImage ? (
