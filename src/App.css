@@ -772,6 +772,15 @@ body {
   font-weight: 600;
   z-index: 10;
   box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.project-card-unique:hover .featured-tag-unique {
+  opacity: 1;
+  transform: translateY(0);
   animation: pulse-glow 2s infinite;
 }
 
