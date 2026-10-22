@@ -1,0 +1,6 @@
+# Generated from the Fourth Act design system; edit there and regenerate
+src/components/fourth-act/
+src/styles/tokens.css
+
+# Test coverage reports
+coverage/

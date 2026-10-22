@@ -1,0 +1,16 @@
+/* ==========================================
+   SITE HEADER — fixed Fourth Act NavBar
+   ========================================== */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+/* Align the bar's contents with the page container */
+.site-header .fa-nav {
+  padding-inline: max(var(--gutter), calc((100% - var(--container-max)) / 2));
+}

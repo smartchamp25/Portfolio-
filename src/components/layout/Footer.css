@@ -1,0 +1,7 @@
+/* ==========================================
+   FOOTER — aligned with the page container
+   ========================================== */
+
+.site-footer.fa-footer {
+  padding-inline: max(var(--gutter), calc((100% - var(--container-max)) / 2));
+}

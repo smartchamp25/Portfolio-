@@ -1,16 +1,100 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Primary Meta Tags -->
+    <title>Marwan - Frontend Developer | Portfolio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Marwan - Frontend Developer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="title" content="Marwan - Frontend Developer | Portfolio" />
+    <meta
+      name="description"
+      content="Marwan, a passionate Frontend Developer crafting beautiful, responsive web experiences. Explore projects built with React, TypeScript, and modern web technologies."
+    />
+    <meta
+      name="keywords"
+      content="Marwan, Frontend Developer, React, TypeScript, Web Developer, Portfolio"
+    />
+    <meta name="author" content="Marwan" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://yourportfolio.vercel.app/" />
+    <meta
+      property="og:title"
+      content="Marwan - Frontend Developer | Portfolio"
+    />
+    <meta
+      property="og:description"
+      content="Marwan, a passionate Frontend Developer crafting beautiful, responsive web experiences."
+    />
+    <meta
+      property="og:image"
+      content="https://yourportfolio.vercel.app/og-image.jpg"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://yourportfolio.vercel.app/" />
+    <meta
+      property="twitter:title"
+      content="Marwan - Frontend Developer | Portfolio"
+    />
+    <meta
+      property="twitter:description"
+      content="Marwan, a passionate Frontend Developer crafting beautiful, responsive web experiences."
+    />
+    <meta
+      property="twitter:image"
+      content="https://yourportfolio.vercel.app/twitter-image.jpg"
+    />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://yourportfolio.vercel.app/" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Theme: dark (Void) by default; apply a saved choice before first paint -->
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0916" />
+    <script>
+      try {
+        var t = localStorage.getItem('theme')
+        if (t === 'light' || t === 'dark')
+          document.documentElement.setAttribute('data-theme', t)
+      } catch (e) {}
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Marwan",
+        "jobTitle": "Frontend Developer",
+        "url": "https://yourportfolio.vercel.app/",
+        "sameAs": [
+          "https://github.com/smartchamp25",
+          "https://linkedin.com/in/marwan-smartchamp-1748b8383/",
+          "https://twitter.com/yourusername"
+        ],
+        "knowsAbout": [
+          "React",
+          "TypeScript",
+          "JavaScript",
+          "HTML",
+          "CSS",
+          "Tailwind CSS",
+          "Supabase",
+          "Git"
+        ],
+        "description": "Frontend Developer crafting beautiful, responsive web experiences"
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

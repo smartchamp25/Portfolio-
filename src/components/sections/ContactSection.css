@@ -1,0 +1,49 @@
+/* ==========================================
+   ACT IV — THE ENCORE
+   ========================================== */
+
+.encore {
+  overflow: hidden;
+}
+
+/* A low violet bloom under the closing lines */
+.encore__glow {
+  position: absolute;
+  left: 50%;
+  bottom: -40%;
+  width: min(960px, 120%);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: var(--radius-full);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--violet) 18%, transparent),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.encore__inner {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.encore__links {
+  display: grid;
+  width: 100%;
+  max-width: 640px;
+  margin-top: var(--space-12);
+  border-top: var(--hairline) solid var(--line);
+}
+
+.encore__cta {
+  margin-top: var(--space-12);
+}
+
+@media (max-width: 640px) {
+  .encore .fa-contact__value {
+    font-size: 14px;
+    line-height: 22px;
+  }
+}

@@ -1,0 +1,120 @@
+/* Fourth Act — design tokens. Generated from the design system's tokens.json; edit there, then regenerate. */
+
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('../assets/fonts/InstrumentSerif-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('../assets/fonts/InstrumentSerif-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('../assets/fonts/Manrope-Variable.woff2') format('woff2');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('../assets/fonts/JetBrainsMono-Variable.woff2') format('woff2');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --void: #0b0916;
+  --void-deep: #07060f;
+  --stage: #141024;
+  --stage-high: #1d1733;
+  --line: #2a2245;
+  --line-strong: #73679a;
+  --chrome: #d5c9e0;
+  --ink: #f3eff8;
+  --ink-muted: #aba2c2;
+  --ink-faint: #8f85aa;
+  --crimson: #d91f45;
+  --crimson-text: #ff6b84;
+  --crimson-soft: #2a0c19;
+  --on-crimson: #ffffff;
+  --violet: #8341cd;
+  --violet-text: #b08af5;
+  --violet-soft: #211539;
+  --on-violet: #ffffff;
+  --flare: #f27450;
+  --focus: #c9a8ff;
+  --link: var(--violet-text);
+  --shadow-sm: 0 1px 0 #ffffff0a inset, 0 2px 8px #00000066;
+  --shadow-lg: 0 32px 64px -24px #000000cc;
+  --glow-crimson: 0 8px 32px -8px #d91f4599;
+  --glow-violet: 0 0 96px 16px #8341cd59;
+  --focus-ring: 0 0 0 2px #0b0916, 0 0 0 4px #c9a8ff;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --void: #f6f3f9;
+  --void-deep: #ece7f3;
+  --stage: #ffffff;
+  --stage-high: #f1ecf7;
+  --line: #ddd4e8;
+  --line-strong: #8a7ea3;
+  --chrome: #5e5373;
+  --ink: #160f22;
+  --ink-muted: #574d6b;
+  --ink-faint: #675d7e;
+  --crimson: #c4163a;
+  --crimson-text: #b0122f;
+  --crimson-soft: #fce8ec;
+  --on-crimson: #ffffff;
+  --violet: #6c2fc4;
+  --violet-text: #6127b5;
+  --violet-soft: #efe7fb;
+  --on-violet: #ffffff;
+  --flare: #d9481f;
+  --focus: #6c2fc4;
+  --link: var(--violet-text);
+  --shadow-sm: 0 1px 2px #160f220f, 0 2px 8px #160f2214;
+  --shadow-lg: 0 24px 48px -20px #160f222e;
+  --glow-crimson: 0 8px 24px -8px #c4163a66;
+  --glow-violet: 0 0 96px 8px #6c2fc426;
+  --focus-ring: 0 0 0 2px #f6f3f9, 0 0 0 4px #6c2fc4;
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --container-max: 1200px;
+  --measure: 56ch;
+  --nav-height: 72px;
+  --hairline: 1px;
+  --dur-quick: 160ms;
+  --dur-base: 320ms;
+  --dur-stage: 640ms;
+  --dur-curtain: 1280ms;
+  --ease-stage: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --font-display: "Instrument Serif", "Cormorant Garamond", Georgia, serif;
+  --font-sans: Manrope, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}

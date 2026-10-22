@@ -1,0 +1,349 @@
+/* ==========================================
+   PROLOGUE — HERO (Fourth Act reference layout)
+   ========================================== */
+
+.prologue {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: max(100svh, 720px);
+  padding: var(--nav-height) var(--gutter) 0;
+  overflow: hidden;
+}
+
+/* One crimson spotlight, top left */
+.prologue__spot {
+  position: absolute;
+  left: -16%;
+  top: -32%;
+  width: 76%;
+  height: 110%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--crimson) 11%, transparent),
+    transparent
+  );
+}
+
+.prologue__main {
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: center;
+  gap: var(--space-8);
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-block: var(--space-12);
+}
+
+.prologue__copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-6);
+}
+
+.prologue__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.prologue__eyebrow b {
+  font-weight: 500;
+  color: var(--chrome);
+}
+
+.prologue__rule {
+  width: var(--space-12);
+  height: var(--hairline);
+  background: var(--chrome);
+}
+
+.prologue__name {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(72px, 12vw, 144px);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.prologue__name .fa-star {
+  margin-top: var(--space-4);
+}
+
+.prologue__tagline {
+  max-width: 30em;
+  font-size: 20px;
+  line-height: 32px;
+  color: var(--ink-muted);
+}
+
+.prologue__tagline em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2em;
+  color: var(--ink);
+}
+
+.prologue__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.prologue__social {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.prologue__social > span {
+  margin-right: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* Entrance stagger */
+.prologue__d1 {
+  animation-delay: 240ms;
+}
+.prologue__d2 {
+  animation-delay: 560ms;
+}
+.prologue__d3 {
+  animation-delay: 720ms;
+}
+.prologue__d4 {
+  animation-delay: 880ms;
+}
+.prologue__orbit.fa-rise {
+  animation-delay: 720ms;
+}
+
+/* ---------- Orbit ---------- */
+.prologue__orbit {
+  position: relative;
+  justify-self: center;
+  width: 440px;
+  height: 440px;
+}
+
+.prologue__orbit::before {
+  content: '';
+  position: absolute;
+  inset: 40px;
+  border-radius: var(--radius-full);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--violet) 34%, transparent),
+    color-mix(in srgb, var(--violet) 12%, transparent) 55%,
+    transparent
+  );
+}
+
+.prologue__orbit::after {
+  content: '';
+  position: absolute;
+  inset: 204px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--violet) 40%, transparent);
+  box-shadow: var(--glow-violet);
+  filter: blur(12px);
+}
+
+.prologue__orbit svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.orbit-ring {
+  fill: none;
+  stroke: var(--chrome);
+  stroke-width: 1;
+}
+.orbit-ring--1 {
+  opacity: 0.42;
+}
+.orbit-ring--2 {
+  opacity: 0.3;
+}
+.orbit-ring--3 {
+  opacity: 0.2;
+}
+.orbit-ring--4 {
+  opacity: 0.32;
+  stroke-dasharray: 1 7;
+}
+.orbit-arc {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.orbit-arc--crimson {
+  stroke: var(--crimson);
+}
+.orbit-arc--violet {
+  stroke: var(--violet);
+}
+.orbit-dot--chrome {
+  fill: var(--chrome);
+}
+.orbit-dot--crimson {
+  fill: var(--crimson);
+}
+.orbit-dot--violet {
+  fill: var(--violet);
+}
+.orbit-dot--ink {
+  fill: var(--ink);
+}
+.orbit-spark {
+  fill: none;
+  stroke: var(--chrome);
+  stroke-width: 1;
+}
+
+.prologue__spin {
+  transform-origin: 220px 220px;
+  animation: prologue-spin 96s linear infinite;
+}
+
+@keyframes prologue-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Scroll cue ---------- */
+.prologue__cue {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto var(--space-8);
+  padding-top: var(--space-4);
+  border-top: var(--hairline) solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.prologue__cue button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition: color var(--dur-quick) var(--ease-stage);
+}
+
+.prologue__cue button:hover {
+  color: var(--ink);
+}
+.prologue__cue button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.prologue__cue button svg {
+  animation: prologue-nudge 2.4s var(--ease-stage) infinite;
+}
+
+@keyframes prologue-nudge {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .prologue__main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The orbit drifts behind the copy */
+  .prologue__orbit {
+    position: absolute;
+    right: -120px;
+    top: 50%;
+    width: 400px;
+    height: 400px;
+    margin-top: -200px;
+    opacity: 0.45;
+  }
+
+  .prologue__orbit.fa-rise {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .prologue__orbit {
+    right: -200px;
+    opacity: 0.3;
+  }
+
+  .prologue__tagline {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .prologue__actions {
+    flex-direction: column;
+    align-self: stretch;
+    width: 100%;
+  }
+
+  .prologue__cue > span {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prologue__spin,
+  .prologue__cue button svg {
+    animation: none;
+  }
+}
