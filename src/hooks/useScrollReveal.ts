@@ -9,7 +9,7 @@ interface UseScrollRevealOptions {
 /**
  * Custom hook for scroll-based reveal animations.
  * Adds the 'visible' class to matching elements once they enter the viewport.
- * Also picks up elements rendered later (lazy-loaded sections).
+ * Also picks up elements rendered later.
  */
 export const useScrollReveal = (options: UseScrollRevealOptions = {}) => {
   const { threshold = 96, selector = '.reveal-on-scroll' } = options
@@ -35,7 +35,7 @@ export const useScrollReveal = (options: UseScrollRevealOptions = {}) => {
 
     observeAll()
 
-    // Lazy sections mount after this effect runs — watch for them
+    // Content that mounts after this effect runs — watch for it
     const mutations = new MutationObserver(observeAll)
     mutations.observe(document.body, { childList: true, subtree: true })
 

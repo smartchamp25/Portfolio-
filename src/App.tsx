@@ -1,4 +1,3 @@
-import { lazy, Suspense } from 'react'
 import './App.css'
 import { SECTION_IDS } from './constants'
 
@@ -8,18 +7,14 @@ import { useScroll, useScrollReveal, useScrollToSection } from './hooks'
 // Layout components
 import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
-import { LoadingSpinner } from './components/ui/LoadingSpinner'
 
-// Lazy load section components for better performance
-const Prologue = lazy(() => import('./components/sections/Prologue'))
-const AboutSection = lazy(() => import('./components/sections/AboutSection'))
-const SkillsSection = lazy(() => import('./components/sections/SkillsSection'))
-const ProjectsSection = lazy(
-  () => import('./components/sections/ProjectsSection')
-)
-const ContactSection = lazy(
-  () => import('./components/sections/ContactSection')
-)
+// Sections load with the page: each is only a few KB, and lazy-loading them
+// made the hero replace a short placeholder and push everything below it down
+import Prologue from './components/sections/Prologue'
+import AboutSection from './components/sections/AboutSection'
+import SkillsSection from './components/sections/SkillsSection'
+import ProjectsSection from './components/sections/ProjectsSection'
+import ContactSection from './components/sections/ContactSection'
 
 // Data files
 import { skills, secondarySkills } from './Data/skills'
@@ -56,25 +51,11 @@ function App() {
       />
 
       <main id="main">
-        <Suspense fallback={<LoadingSpinner />}>
-          <Prologue scrollToSection={scrollToSection} />
-        </Suspense>
-
-        <Suspense fallback={<LoadingSpinner />}>
-          <AboutSection stats={stats} />
-        </Suspense>
-
-        <Suspense fallback={<LoadingSpinner />}>
-          <SkillsSection skills={skills} secondarySkills={secondarySkills} />
-        </Suspense>
-
-        <Suspense fallback={<LoadingSpinner />}>
-          <ProjectsSection projects={projects} />
-        </Suspense>
-
-        <Suspense fallback={<LoadingSpinner />}>
-          <ContactSection />
-        </Suspense>
+        <Prologue scrollToSection={scrollToSection} />
+        <AboutSection stats={stats} />
+        <SkillsSection skills={skills} secondarySkills={secondarySkills} />
+        <ProjectsSection projects={projects} />
+        <ContactSection />
       </main>
 
       <Footer />

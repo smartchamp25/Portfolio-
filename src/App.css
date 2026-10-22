@@ -27,13 +27,6 @@
   margin-top: var(--space-12);
 }
 
-/* Lazy-section fallback */
-.act-loading {
-  display: grid;
-  place-items: center;
-  min-height: 50vh;
-}
-
 @media (max-width: 1024px) {
   .act {
     padding-block: var(--space-24);

@@ -88,8 +88,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           <div className="error-boundary-content">
             <h2>⚠️ Something went wrong</h2>
             <p>
-              The Virtuoso encountered an unexpected error. Please refresh the
-              page.
+              An unexpected error stopped the page from loading. Please refresh
+              the page.
             </p>
             {import.meta.env.DEV && this.state.error && (
               <details className="error-details">

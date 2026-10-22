@@ -83,10 +83,24 @@ describe('Data Files', () => {
 
     it('has expected stat labels', () => {
       const labels = stats.map((s) => s.label)
-      expect(labels).toContain('Projects shipped')
-      expect(labels).toContain('Tools in daily use')
+      expect(labels.some((l) => /^Projects? built$/.test(l))).toBe(true)
+      expect(labels).toContain('Tools I work with')
       expect(labels).toContain('Core skills')
-      expect(labels).toContain('The Virtuoso')
+      expect(labels).toContain('Lighthouse accessibility')
+    })
+
+    it('counts its numbers from the data files', () => {
+      const value = (label: string | RegExp) =>
+        stats.find((s) =>
+          typeof label === 'string' ? s.label === label : label.test(s.label)
+        )?.number
+      expect(value(/^Projects? built$/)).toBe(
+        String(projects.filter((p) => !p.status).length)
+      )
+      expect(value('Tools I work with')).toBe(
+        String(skills.length + secondarySkills.length)
+      )
+      expect(value('Core skills')).toBe(String(skills.length))
     })
   })
 })

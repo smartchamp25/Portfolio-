@@ -311,7 +311,7 @@ export function SkillCard({ name, icon, level = 3, levelLabel, note, className }
   return (
     <div className={cx('fa-skill', className)}>
       <span className="fa-skill__icon" aria-hidden="true">{icon}</span>
-      <span className="fa-skill__level" aria-label={`${word}, level ${level} of 4`}>
+      <span className="fa-skill__level" role="img" aria-label={`${word}, level ${level} of 4`}>
         <span className="fa-skill__notches" aria-hidden="true">
           {[1, 2, 3, 4].map((n) => <span key={n} className={cx('fa-skill__notch', n <= level && 'is-on')} />)}
         </span>

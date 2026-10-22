@@ -65,8 +65,11 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
           ))}
         </div>
 
-        <Quote cite="The Virtuoso" className="about__quote reveal-on-scroll">
-          In purity, there is beauty.
+        <Quote
+          cite="Edsger W. Dijkstra"
+          className="about__quote reveal-on-scroll"
+        >
+          Simplicity is prerequisite for reliability.
         </Quote>
       </div>
     </section>
