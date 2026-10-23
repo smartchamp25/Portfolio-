@@ -8,6 +8,9 @@ export const EMAIL = import.meta.env.VITE_EMAIL || 'smartchampmarwan@gmail.com'
 export const LINKEDIN_URL =
   'https://www.linkedin.com/in/marwan-smartchamp-1748b8383/'
 
+/** The live site's address; placeholder until the real domain is known */
+export const SITE_URL = 'https://yourportfolio.vercel.app'
+
 // ==========================================
 // APPLICATION CONSTANTS
 // ==========================================
