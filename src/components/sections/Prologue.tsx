@@ -1,6 +1,7 @@
-import { ArrowDown, ArrowRight, Mail } from 'lucide-react'
+import { ArrowRight, Mail } from 'lucide-react'
 import { Badge, Button, Icon, IconButton, Star } from '../fourth-act'
 import { EMAIL, GITHUB_URL, LINKEDIN_URL } from '../../constants'
+import type { SceneId } from '../../theatre/scenes'
 import './Prologue.css'
 
 // ==========================================
@@ -8,7 +9,7 @@ import './Prologue.css'
 // ==========================================
 
 interface PrologueProps {
-  scrollToSection: (sectionId: string) => void
+  onNavigate: (id: SceneId) => void
 }
 
 const STAR_PATH =
@@ -68,7 +69,7 @@ const Orbit = () => (
 // PROLOGUE — the hero
 // ==========================================
 
-const Prologue = ({ scrollToSection }: PrologueProps) => {
+const Prologue = ({ onNavigate }: PrologueProps) => {
   return (
     <section
       id="prologue"
@@ -103,10 +104,10 @@ const Prologue = ({ scrollToSection }: PrologueProps) => {
             <Button
               variant="primary"
               size="lg"
-              href="#projects"
+              href="/projects"
               onClick={(e) => {
                 e.preventDefault()
-                scrollToSection('projects')
+                onNavigate('projects')
               }}
               iconEnd={<ArrowRight size={20} strokeWidth={1.5} />}
             >
@@ -148,15 +149,11 @@ const Prologue = ({ scrollToSection }: PrologueProps) => {
       </div>
 
       <div className="prologue__cue fa-rise prologue__d4">
-        <button
-          type="button"
-          onClick={() => scrollToSection('about')}
-          aria-label="Scroll to Act I, about"
-        >
-          <ArrowDown size={16} strokeWidth={1.5} />
-          Scroll
+        <button type="button" onClick={() => onNavigate('about')}>
+          Next: Act I
+          <ArrowRight size={16} strokeWidth={1.5} />
         </button>
-        <span>Next · Act I — The Creator</span>
+        <span>The Creator</span>
       </div>
     </section>
   )

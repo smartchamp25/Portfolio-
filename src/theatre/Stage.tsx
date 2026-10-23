@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { SITE_URL } from '../constants'
 import { sceneForPath, type SceneId } from './scenes'
+import NextAct from './NextAct'
+import { useActKeys } from './useActKeys'
 
 // Scenes
 import Prologue from '../components/sections/Prologue'
@@ -36,28 +38,32 @@ const Stage = ({ onNavigate }: StageProps) => {
     canonical?.setAttribute('href', SITE_URL + scene.path)
   }, [scene])
 
+  useActKeys(scene.id, onNavigate)
+
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Prologue scrollToSection={(id) => onNavigate(id as SceneId)} />
-        }
-      />
-      <Route path="/about" element={<AboutSection stats={stats} />} />
-      <Route
-        path="/skills"
-        element={
-          <SkillsSection skills={skills} secondarySkills={secondarySkills} />
-        }
-      />
-      <Route
-        path="/projects"
-        element={<ProjectsSection projects={projects} />}
-      />
-      <Route path="/contact" element={<ContactSection />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Prologue onNavigate={onNavigate} />} />
+        <Route path="/about" element={<AboutSection stats={stats} />} />
+        <Route
+          path="/skills"
+          element={
+            <SkillsSection skills={skills} secondarySkills={secondarySkills} />
+          }
+        />
+        <Route
+          path="/projects"
+          element={<ProjectsSection projects={projects} />}
+        />
+        <Route path="/contact" element={<ContactSection />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+
+      {/* The Prologue has its own "Next: Act I" cue */}
+      {scene.act ? (
+        <NextAct current={scene.id} onNavigate={onNavigate} />
+      ) : null}
+    </>
   )
 }
 
