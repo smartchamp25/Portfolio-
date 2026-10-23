@@ -1,0 +1,49 @@
+/* ==========================================
+   LOTUS TRAP — three stacked layers; the sphere stays still
+   ========================================== */
+
+.lotus-trap {
+  position: relative;
+  display: inline-block;
+  width: 96px;
+  height: 96px;
+}
+
+.lotus-trap__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.lotus-trap.is-arming .lotus-trap__outer {
+  animation: lotus-outer 1500ms var(--ease-stage);
+}
+
+.lotus-trap.is-arming .lotus-trap__inner {
+  animation: lotus-inner 1500ms var(--ease-stage);
+}
+
+@keyframes lotus-outer {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-60deg);
+  }
+}
+
+@keyframes lotus-inner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(60deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lotus-trap.is-arming .lotus-trap__layer {
+    animation: none;
+  }
+}

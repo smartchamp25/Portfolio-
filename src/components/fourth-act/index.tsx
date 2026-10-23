@@ -421,13 +421,17 @@ export interface QuoteProps {
   cite?: string;
   /** Show the lotus above the quote (default true). */
   lotus?: boolean;
+  /** A custom mark above the quote, in place of the drawn lotus. */
+  mark?: React.ReactNode;
   className?: string;
 }
 
-export function Quote({ children, cite, lotus = true, className }: QuoteProps) {
+export function Quote({ children, cite, lotus = true, mark, className }: QuoteProps) {
   return (
     <figure className={cx('fa-quote', className)}>
-      {lotus ? (
+      {mark ? (
+        <div className="fa-quote__mark" aria-hidden="true">{mark}</div>
+      ) : lotus ? (
         <svg className="fa-quote__lotus" viewBox="0 0 100 100" aria-hidden="true">
           <path d="M50 20 C50 20, 45 35, 45 50 C45 65, 50 80, 50 80 C50 80, 55 65, 55 50 C55 35, 50 20, 50 20 Z" opacity="0.8" />
           <path d="M50 30 C50 30, 30 35, 25 50 C20 65, 35 75, 50 75 C65 75, 80 65, 75 50 C70 35, 50 30, 50 30 Z" opacity="0.6" />

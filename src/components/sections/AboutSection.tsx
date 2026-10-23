@@ -1,4 +1,5 @@
 import { ActHeading, Quote, StatCard } from '../fourth-act'
+import LotusTrap from '../ui/LotusTrap'
 import type { Stat } from '../../types'
 import './AboutSection.css'
 
@@ -68,6 +69,7 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
         <Quote
           cite="Edsger W. Dijkstra"
           className="about__quote reveal-on-scroll"
+          mark={<LotusTrap />}
         >
           Simplicity is prerequisite for reliability.
         </Quote>
