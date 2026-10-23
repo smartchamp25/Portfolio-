@@ -10,16 +10,15 @@ import Footer from './components/layout/Footer'
 
 // The journey
 import Stage from './theatre/Stage'
+import { LightsProvider, StageLights } from './theatre/lights'
 import { useStageNavigate } from './theatre/useStageNavigate'
 import { sceneForPath } from './theatre/scenes'
 
 // ==========================================
-// MAIN APP COMPONENT
-// Prologue → Act I (About) → Act II (Skills) → Act III (Projects) → Act IV (Contact),
-// each its own scene and address
+// THE PERFORMANCE — everything inside the theatre's providers
 // ==========================================
 
-function App() {
+const Performance = () => {
   const { scrolled } = useScroll({ scrollThreshold: 50 })
   const { pathname } = useLocation()
   const scene = sceneForPath(pathname)
@@ -41,7 +40,22 @@ function App() {
       </main>
 
       <Footer />
+      <StageLights />
     </div>
+  )
+}
+
+// ==========================================
+// MAIN APP COMPONENT
+// Prologue → Act I (About) → Act II (Skills) → Act III (Projects) → Act IV (Contact),
+// each its own scene and address
+// ==========================================
+
+function App() {
+  return (
+    <LightsProvider>
+      <Performance />
+    </LightsProvider>
   )
 }
 

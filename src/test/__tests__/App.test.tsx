@@ -2,8 +2,8 @@
  * App routing tests: each act is its own scene
  */
 
-import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import App from '@/App'
 import { ThemeProvider } from '@/contexts/ThemeContext'
@@ -63,8 +63,11 @@ describe('App routing', () => {
   })
 
   it('navigates when an act link is clicked', () => {
+    vi.useFakeTimers()
     renderAt('/')
     fireEvent.click(screen.getByRole('link', { name: 'Skills' }))
+    act(() => vi.advanceTimersByTime(1000))
     expect(screen.getByRole('heading', { name: /reach/ })).toBeInTheDocument()
+    vi.useRealTimers()
   })
 })

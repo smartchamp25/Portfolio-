@@ -1,15 +1,5 @@
-import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { SCENES, type SceneId } from './scenes'
+import type { SceneId } from './scenes'
+import { useGoToScene } from './lights'
 
-/** Move to a scene by id */
-export const useStageNavigate = (): ((id: SceneId) => void) => {
-  const navigate = useNavigate()
-  return useCallback(
-    (id: SceneId) => {
-      const scene = SCENES.find((s) => s.id === id)
-      if (scene) navigate(scene.path)
-    },
-    [navigate]
-  )
-}
+/** Move to a scene by id, through the stage lights */
+export const useStageNavigate = (): ((id: SceneId) => void) => useGoToScene()

@@ -1,0 +1,83 @@
+/* ==========================================
+   STAGE LIGHTS — lights down, then a spotlight opens on the next scene
+   ========================================== */
+
+/* Scene headings receive focus after a scene change so screen readers land
+   in the right place; they are not controls, so no focus ring */
+h1[tabindex='-1']:focus,
+h2[tabindex='-1']:focus {
+  outline: none;
+}
+
+@property --spot {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+.stage-lights {
+  position: fixed;
+  inset: 0;
+  z-index: 90; /* over the scene, under the top bar */
+  pointer-events: none;
+  background: var(--void);
+  opacity: 0;
+}
+
+.stage-lights--down {
+  opacity: 1;
+  transition: opacity 350ms var(--ease-stage);
+}
+
+.stage-lights--up {
+  opacity: 1;
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent var(--spot),
+    #000 calc(var(--spot) + 12vmax)
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent var(--spot),
+    #000 calc(var(--spot) + 12vmax)
+  );
+  /* Slow in, slow out: the spot starts small, widens, then settles. The site's
+     stage easing starts too fast here and would finish the reveal at once */
+  animation: stage-spotlight 650ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+/* 110vmax clears every corner (at most 71vmax away) plus the soft edge */
+@keyframes stage-spotlight {
+  0% {
+    --spot: 0px;
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    --spot: 110vmax;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-lights--down {
+    transition-duration: 75ms;
+  }
+
+  .stage-lights--up {
+    -webkit-mask-image: none;
+    mask-image: none;
+    animation: stage-fade-up 75ms linear both;
+  }
+
+  @keyframes stage-fade-up {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}
