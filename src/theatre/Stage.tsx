@@ -4,6 +4,8 @@ import { SITE_URL } from '../constants'
 import { sceneForPath, type SceneId } from './scenes'
 import NextAct from './NextAct'
 import { useActKeys } from './useActKeys'
+import { useLightsPhase } from './lights'
+import { useLine } from './useLine'
 
 // Scenes
 import Prologue from '../components/sections/Prologue'
@@ -39,6 +41,13 @@ const Stage = ({ onNavigate }: StageProps) => {
   }, [scene])
 
   useActKeys(scene.id, onNavigate)
+
+  // Each act's line, once per visit, as the light rises on it
+  const say = useLine()
+  const phase = useLightsPhase()
+  useEffect(() => {
+    if (scene.line && phase !== 'down') say(scene.line)
+  }, [scene, phase, say])
 
   return (
     <>

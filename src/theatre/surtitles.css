@@ -1,0 +1,58 @@
+/* ==========================================
+   SURTITLES — the line, set above the stage like a theatre's surtitle board
+   ========================================== */
+
+.surtitles {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-12);
+  z-index: 95; /* over the stage lights, under the top bar */
+  width: min(var(--measure), calc(100% - 2 * var(--gutter)));
+  transform: translateX(-50%);
+  pointer-events: none;
+  text-align: center;
+}
+
+.surtitles__line {
+  display: inline-block;
+  margin: 0;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--void-deep) 78%, transparent);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 26px;
+  line-height: 34px;
+  text-wrap: balance;
+  animation: surtitle-in var(--dur-base) var(--ease-stage) both;
+}
+
+@keyframes surtitle-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .surtitles {
+    bottom: var(--space-8);
+  }
+
+  .surtitles__line {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surtitles__line {
+    animation: none;
+  }
+}

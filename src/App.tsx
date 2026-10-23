@@ -12,6 +12,7 @@ import Footer from './components/layout/Footer'
 import Stage from './theatre/Stage'
 import { LightsProvider, StageLights } from './theatre/lights'
 import { SoundProvider } from './theatre/sound'
+import { SurtitleProvider, Surtitles } from './theatre/surtitles'
 import { useStageNavigate } from './theatre/useStageNavigate'
 import { sceneForPath } from './theatre/scenes'
 
@@ -42,6 +43,7 @@ const Performance = () => {
 
       <Footer />
       <StageLights />
+      <Surtitles />
     </div>
   )
 }
@@ -55,9 +57,11 @@ const Performance = () => {
 function App() {
   return (
     <SoundProvider>
-      <LightsProvider>
-        <Performance />
-      </LightsProvider>
+      <SurtitleProvider>
+        <LightsProvider>
+          <Performance />
+        </LightsProvider>
+      </SurtitleProvider>
     </SoundProvider>
   )
 }
