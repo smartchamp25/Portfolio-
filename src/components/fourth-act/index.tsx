@@ -214,9 +214,16 @@ export function ActHeading({ act, eyebrow, title, lead, align = 'start', as = 'h
 
 /* ------------------------------------------------------------------ NavBar */
 
-export interface NavItem { id: string; label: string }
+export interface NavItem {
+  id: string;
+  label: string;
+  /** Real address for the link (routed sites). Defaults to the `#id` anchor. */
+  href?: string;
+}
 export interface NavBarProps {
   brand: string;
+  /** Real address for the brand link (routed sites). Defaults to `#prologue`. */
+  brandHref?: string;
   /** One letter in the rotated chrome diamond. Defaults to the brand's first letter. */
   monogram?: string;
   /** Up to four items; each gets its act numeral (I–IV). */
@@ -234,13 +241,15 @@ export interface NavBarProps {
   className?: string;
 }
 
-export function NavBar({ brand, monogram, items, active, onNavigate, actions, scrolled = false, menuOpen = false, onMenuToggle, className }: NavBarProps) {
+export function NavBar({ brand, brandHref, monogram, items, active, onNavigate, actions, scrolled = false, menuOpen = false, onMenuToggle, className }: NavBarProps) {
   const go = (id: string) => (e: React.MouseEvent) => {
+    // Leave modified clicks (new tab, new window) to the browser
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
     if (onNavigate) { e.preventDefault(); onNavigate(id); }
   };
   return (
     <nav className={cx('fa-nav', scrolled && 'fa-nav--scrolled', menuOpen && 'fa-nav--open', className)} aria-label="Main">
-      <a className="fa-nav__brand" href="#prologue" onClick={go('prologue')}>
+      <a className="fa-nav__brand" href={brandHref ?? '#prologue'} onClick={go('prologue')}>
         <span className="fa-nav__mono" aria-hidden="true"><span>{monogram ?? brand.charAt(0)}</span></span>
         <span className="fa-nav__name">{brand}</span>
       </a>
@@ -248,7 +257,7 @@ export function NavBar({ brand, monogram, items, active, onNavigate, actions, sc
         {items.map((it, i) => (
           <li key={it.id}>
             <a
-              href={'#' + it.id}
+              href={it.href ?? '#' + it.id}
               className={cx('fa-nav__link', active === it.id && 'is-active')}
               aria-current={active === it.id ? 'location' : undefined}
               onClick={go(it.id)}

@@ -14,9 +14,9 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
 
 describe('Navigation Component', () => {
   const mockProps = {
+    active: 'prologue' as const,
+    onNavigate: vi.fn(),
     scrolled: false,
-    activeSection: 'prologue',
-    scrollToSection: vi.fn(),
   }
 
   const renderWithTheme = (ui: React.ReactElement) => {
@@ -53,10 +53,22 @@ describe('Navigation Component', () => {
     ).toBeInTheDocument()
   })
 
-  it('calls scrollToSection when nav item is clicked', () => {
+  it('calls onNavigate with the scene id', () => {
     renderWithTheme(<Navigation {...mockProps} />)
     fireEvent.click(screen.getByRole('link', { name: 'About' }))
-    expect(mockProps.scrollToSection).toHaveBeenCalledWith('about')
+    expect(mockProps.onNavigate).toHaveBeenCalledWith('about')
+  })
+
+  it('links acts to their addresses', () => {
+    renderWithTheme(<Navigation {...mockProps} />)
+    expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute(
+      'href',
+      '/about'
+    )
+    expect(screen.getByRole('link', { name: /Marwan/ })).toHaveAttribute(
+      'href',
+      '/'
+    )
   })
 
   it('toggles the mobile menu when the menu button is clicked', () => {
@@ -70,8 +82,8 @@ describe('Navigation Component', () => {
     )
   })
 
-  it('marks the current section', () => {
-    renderWithTheme(<Navigation {...mockProps} activeSection="about" />)
+  it('marks the current scene', () => {
+    renderWithTheme(<Navigation {...mockProps} active="about" />)
     const active = screen.getByRole('link', { name: 'About' })
     expect(active).toHaveClass('is-active')
     expect(active).toHaveAttribute('aria-current', 'location')
@@ -83,5 +95,13 @@ describe('Navigation Component', () => {
     expect(
       screen.getByRole('button', { name: /Switch to (light|dark) mode/ })
     ).toBeInTheDocument()
+  })
+
+  it('hides the toggles and dims during the intro', () => {
+    const { container } = renderWithTheme(<Navigation {...mockProps} intro />)
+    expect(
+      screen.queryByRole('button', { name: /Switch to/ })
+    ).not.toBeInTheDocument()
+    expect(container.querySelector('.site-header--intro')).toBeInTheDocument()
   })
 })

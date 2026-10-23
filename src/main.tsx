@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import './styles/tokens.css'
 import './components/fourth-act/fourth-act.css'
 import './index.css'
@@ -15,9 +16,11 @@ import { ThemeProvider } from './contexts/ThemeContext'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
+      <BrowserRouter>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
     </ErrorBoundary>
   </StrictMode>
 )

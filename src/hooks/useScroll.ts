@@ -2,53 +2,30 @@ import { useState, useEffect } from 'react'
 
 interface UseScrollOptions {
   scrollThreshold?: number
-  sectionIds?: readonly string[]
-  sectionOffset?: number
 }
 
 interface UseScrollReturn {
   scrolled: boolean
-  activeSection: string
 }
 
 /**
- * Custom hook for scroll-related state management
+ * Whether the page has scrolled past a threshold (for the frosted top bar)
  * @param options - Configuration options
  * @returns Object containing scroll state
  */
 export const useScroll = (options: UseScrollOptions = {}): UseScrollReturn => {
-  const { scrollThreshold = 50, sectionIds = [], sectionOffset = 200 } = options
+  const { scrollThreshold = 50 } = options
 
   const [scrolled, setScrolled] = useState<boolean>(false)
-  const [activeSection, setActiveSection] = useState<string>(
-    sectionIds[0] || ''
-  )
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Track scrolled state
-      setScrolled(window.scrollY > scrollThreshold)
-
-      // Track which section is currently in view
-      if (sectionIds.length > 0) {
-        for (const section of sectionIds) {
-          const element = document.getElementById(section)
-          if (element) {
-            const rect = element.getBoundingClientRect()
-            if (rect.top <= sectionOffset && rect.bottom >= sectionOffset) {
-              setActiveSection(section)
-              break
-            }
-          }
-        }
-      }
-    }
+    const handleScroll = () => setScrolled(window.scrollY > scrollThreshold)
 
     window.addEventListener('scroll', handleScroll)
     handleScroll() // Initial check on mount
 
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [scrollThreshold, sectionIds, sectionOffset])
+  }, [scrollThreshold])
 
-  return { scrolled, activeSection }
+  return { scrolled }
 }

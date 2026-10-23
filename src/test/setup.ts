@@ -7,12 +7,15 @@ afterEach(() => {
   cleanup()
 })
 
-// Mock IntersectionObserver
-globalThis.IntersectionObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-})) as unknown as typeof IntersectionObserver
+// Mock IntersectionObserver (a class, so components can construct it)
+class MockIntersectionObserver {
+  observe = vi.fn()
+  unobserve = vi.fn()
+  disconnect = vi.fn()
+  takeRecords = vi.fn(() => [])
+}
+globalThis.IntersectionObserver =
+  MockIntersectionObserver as unknown as typeof IntersectionObserver
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {

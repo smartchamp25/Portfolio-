@@ -16,26 +16,6 @@ export const SITE_URL = 'https://yourportfolio.vercel.app'
 // ==========================================
 
 /**
- * Main navigation sections of the portfolio
- * Ordered as they appear in the navigation menu
- */
-export const SECTIONS = ['About', 'Skills', 'Projects', 'Contact'] as const
-
-/**
- * Section IDs matching HTML element IDs
- * Used for scroll navigation and active section tracking
- */
-export const SECTION_IDS = [
-  'prologue',
-  'about',
-  'skills',
-  'projects',
-  'contact',
-] as const
-
-export type SectionId = (typeof SECTION_IDS)[number]
-
-/**
  * Social media links for the portfolio
  * Update these URLs with your actual profile links
  */

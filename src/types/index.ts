@@ -77,17 +77,3 @@ export interface SkillsSectionProps {
 export interface ProjectsSectionProps {
   projects: Project[]
 }
-
-// ==========================================
-// SCROLL TYPES
-// ==========================================
-
-export interface ScrollState {
-  scrolled: boolean
-  activeSection: string
-}
-
-export interface ScrollHandlers {
-  handleScroll: () => void
-  scrollToSection: (sectionId: string) => void
-}

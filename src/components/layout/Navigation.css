@@ -14,3 +14,14 @@
 .site-header .fa-nav {
   padding-inline: max(var(--gutter), calc((100% - var(--container-max)) / 2));
 }
+
+/* Over the closed curtain: present but quiet until reached for */
+.site-header--intro {
+  opacity: 0.45;
+  transition: opacity var(--dur-base) var(--ease-stage);
+}
+
+.site-header--intro:hover,
+.site-header--intro:focus-within {
+  opacity: 1;
+}
