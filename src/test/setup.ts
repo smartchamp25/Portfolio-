@@ -17,6 +17,12 @@ class MockIntersectionObserver {
 globalThis.IntersectionObserver =
   MockIntersectionObserver as unknown as typeof IntersectionObserver
 
+// jsdom can't play media: let play() resolve and pause() do nothing
+HTMLMediaElement.prototype.play = function play() {
+  return Promise.resolve()
+}
+HTMLMediaElement.prototype.pause = function pause() {}
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

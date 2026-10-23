@@ -11,6 +11,7 @@ import Footer from './components/layout/Footer'
 // The journey
 import Stage from './theatre/Stage'
 import { LightsProvider, StageLights } from './theatre/lights'
+import { SoundProvider } from './theatre/sound'
 import { useStageNavigate } from './theatre/useStageNavigate'
 import { sceneForPath } from './theatre/scenes'
 
@@ -53,9 +54,11 @@ const Performance = () => {
 
 function App() {
   return (
-    <LightsProvider>
-      <Performance />
-    </LightsProvider>
+    <SoundProvider>
+      <LightsProvider>
+        <Performance />
+      </LightsProvider>
+    </SoundProvider>
   )
 }
 

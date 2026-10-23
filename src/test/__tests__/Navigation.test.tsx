@@ -6,10 +6,13 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import Navigation from '@/components/layout/Navigation'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { SoundProvider } from '@/theatre/sound'
 
 // Wrapper to provide theme context
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <ThemeProvider>{children}</ThemeProvider>
+  <ThemeProvider>
+    <SoundProvider>{children}</SoundProvider>
+  </ThemeProvider>
 )
 
 describe('Navigation Component', () => {
@@ -89,9 +92,12 @@ describe('Navigation Component', () => {
     expect(active).toHaveAttribute('aria-current', 'location')
   })
 
-  it('has a labelled navigation landmark and a theme toggle', () => {
+  it('has a labelled navigation landmark, a sound toggle and a theme toggle', () => {
     renderWithTheme(<Navigation {...mockProps} />)
     expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Turn sound on' })
+    ).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /Switch to (light|dark) mode/ })
     ).toBeInTheDocument()

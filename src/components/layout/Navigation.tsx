@@ -3,6 +3,7 @@ import { NavBar } from '../fourth-act'
 import { SCENES, type SceneId } from '../../theatre/scenes'
 import { useMobileMenu } from '../../hooks'
 import ThemeToggle from '../ui/ThemeToggle'
+import SoundToggle from '../../theatre/SoundToggle'
 import './Navigation.css'
 
 // ==========================================
@@ -53,7 +54,14 @@ const Navigation = ({
         scrolled={scrolled || mobileMenuOpen}
         menuOpen={mobileMenuOpen}
         onMenuToggle={toggleMobileMenu}
-        actions={intro ? undefined : <ThemeToggle />}
+        actions={
+          intro ? undefined : (
+            <>
+              <SoundToggle />
+              <ThemeToggle />
+            </>
+          )
+        }
       />
     </header>
   )
