@@ -88,12 +88,9 @@ without ever getting between a recruiter and the work.
   goes straight to the open stage with no curtain animation.
 - Browsers forbid audio before a user gesture; the "Take your seat" click is
   that gesture.
-- _My call:_ the top bar stays visible over the closed curtain, dimmed until
-  hovered or focused, so a recruiter can go straight to an act. Clicking an
-  act link there skips the intro and opens that act with sound off, exactly
-  like a direct link. On the arrival screen the bar shows only the brand and
-  the act links; the theme and sound toggles appear once the stage is open
-  (the intro is always dark, and the two choice buttons are the sound choice).
+- _Marwan's call (2026-10-24):_ no top bar while the curtain is up. It fades
+  in once the curtain has fully opened, or at once after "Skip intro". A
+  recruiter in a hurry uses "Skip intro" or a direct link to an act.
 - _My call:_ the curtain plays once per browser session. Going back to `/`
   later in the same session (brand link, browser back) shows the Prologue
   directly.

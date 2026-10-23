@@ -103,23 +103,22 @@ describe('Navigation Component', () => {
     ).toBeInTheDocument()
   })
 
-  it('hides the toggles and dims during the intro', () => {
-    const { container } = renderWithTheme(<Navigation {...mockProps} intro />)
+  it('is invisible and out of reach while hidden', () => {
+    renderWithTheme(<Navigation {...mockProps} hidden />)
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument()
     expect(
-      screen.queryByRole('button', { name: /Switch to/ })
+      screen.queryByRole('link', { name: 'About' })
     ).not.toBeInTheDocument()
-    expect(container.querySelector('.site-header--intro')).toBeInTheDocument()
+    expect(screen.getByRole('banner', { hidden: true })).toHaveAttribute(
+      'inert'
+    )
   })
 
-  it('stays dark over the curtain whatever the theme', () => {
-    const { container, rerender } = renderWithTheme(
-      <Navigation {...mockProps} intro />
-    )
-    expect(container.querySelector('header')).toHaveAttribute(
-      'data-theme',
-      'dark'
-    )
+  it('appears when no longer hidden', () => {
+    const { rerender } = renderWithTheme(<Navigation {...mockProps} hidden />)
     rerender(<Navigation {...mockProps} />)
-    expect(container.querySelector('header')).not.toHaveAttribute('data-theme')
+    const bar = screen.getByRole('banner')
+    expect(bar).not.toHaveClass('site-header--hidden')
+    expect(bar).not.toHaveAttribute('inert')
   })
 })

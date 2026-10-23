@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import './App.css'
 
 // Custom hooks
@@ -18,7 +18,7 @@ import { SurtitleProvider, Surtitles } from './theatre/surtitles'
 import { useStageNavigate } from './theatre/useStageNavigate'
 import { useLine } from './theatre/useLine'
 import { curtainVideo } from './theatre/media'
-import { SCENES, sceneForPath, type SceneId } from './theatre/scenes'
+import { sceneForPath } from './theatre/scenes'
 import { hasSeenCurtain, markCurtainSeen } from './theatre/storage'
 
 // ==========================================
@@ -30,7 +30,6 @@ const Performance = () => {
   const { pathname } = useLocation()
   const scene = sceneForPath(pathname)
   const goTo = useStageNavigate()
-  const navigate = useNavigate()
   const { setSoundOn, startMusic } = useSound()
   const say = useLine()
 
@@ -61,13 +60,6 @@ const Performance = () => {
     setCurtain(false)
   }
 
-  // An act link over the closed curtain goes straight there, like a direct link
-  const bypass = (id: SceneId) => {
-    skip()
-    const target = SCENES.find((s) => s.id === id)
-    if (target) navigate(target.path)
-  }
-
   return (
     <div className={closed ? 'portfolio portfolio--curtained' : 'portfolio'}>
       <a href="#main" className="skip-to-content">
@@ -76,9 +68,9 @@ const Performance = () => {
 
       <Navigation
         active={scene.id}
-        onNavigate={curtain ? bypass : goTo}
+        onNavigate={goTo}
         scrolled={scrolled}
-        intro={curtain}
+        hidden={curtain}
       />
 
       <main id="main" inert={closed}>

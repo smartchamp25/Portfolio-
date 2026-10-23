@@ -96,11 +96,27 @@ describe('App curtain', () => {
   })
 
   it('shows the curtain on a first visit to the home page', () => {
-    const { container } = renderAt('/')
+    renderAt('/')
     expect(
       screen.getByRole('button', { name: 'Take your seat' })
     ).toBeInTheDocument()
-    expect(container.querySelector('.site-header--intro')).toBeInTheDocument()
+  })
+
+  it('keeps the top bar hidden until the curtain has opened', () => {
+    renderAt('/')
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Take your seat' }))
+    // The drawn curtain takes 3.2 s to open and 0.6 s to fade
+    act(() => vi.advanceTimersByTime(3000))
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument()
+    act(() => vi.advanceTimersByTime(1000))
+    expect(screen.getByRole('banner')).not.toHaveAttribute('inert')
+  })
+
+  it('shows the top bar at once when the intro is skipped', () => {
+    renderAt('/')
+    fireEvent.click(screen.getByRole('button', { name: 'Skip intro' }))
+    expect(screen.getByRole('banner')).not.toHaveAttribute('inert')
   })
 
   it('skips the curtain on a direct link', () => {
@@ -120,21 +136,6 @@ describe('App curtain', () => {
     expect(
       screen.queryByRole('button', { name: 'Take your seat' })
     ).not.toBeInTheDocument()
-  })
-
-  it('lets an act link bypass the intro', () => {
-    renderAt('/')
-    fireEvent.click(screen.getByRole('link', { name: 'Projects' }))
-    act(() => vi.advanceTimersByTime(0))
-    expect(
-      screen.getByRole('heading', { level: 2, name: /curtain call/ })
-    ).toBeInTheDocument()
-    expect(
-      screen.queryByRole('button', { name: 'Take your seat' })
-    ).not.toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: 'Turn sound on' })
-    ).toBeInTheDocument()
   })
 
   it('starts the music when sound is turned on after a direct link', () => {

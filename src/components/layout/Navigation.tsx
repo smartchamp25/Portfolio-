@@ -14,8 +14,8 @@ interface NavigationProps {
   active: SceneId
   onNavigate: (id: SceneId) => void
   scrolled: boolean
-  /** While the curtain is closed: dimmed bar, act links only */
-  intro?: boolean
+  /** While the curtain is up: no bar until the stage is open */
+  hidden?: boolean
 }
 
 const NAV_ITEMS = SCENES.filter((scene) => scene.act).map((scene) => ({
@@ -32,7 +32,7 @@ const Navigation = ({
   active,
   onNavigate,
   scrolled,
-  intro = false,
+  hidden = false,
 }: NavigationProps) => {
   const { mobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
 
@@ -43,9 +43,8 @@ const Navigation = ({
 
   return (
     <header
-      className={intro ? 'site-header site-header--intro' : 'site-header'}
-      // The intro is a darkened theatre in either theme
-      data-theme={intro ? 'dark' : undefined}
+      className={hidden ? 'site-header site-header--hidden' : 'site-header'}
+      inert={hidden}
     >
       <NavBar
         brand="Marwan"
@@ -57,12 +56,10 @@ const Navigation = ({
         menuOpen={mobileMenuOpen}
         onMenuToggle={toggleMobileMenu}
         actions={
-          intro ? undefined : (
-            <>
-              <SoundToggle />
-              <ThemeToggle />
-            </>
-          )
+          <>
+            <SoundToggle />
+            <ThemeToggle />
+          </>
         }
       />
     </header>
