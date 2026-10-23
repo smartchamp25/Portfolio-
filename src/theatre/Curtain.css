@@ -1,0 +1,167 @@
+/* ==========================================
+   CURTAIN — velvet halves on a dark stage, opening outward
+   ========================================== */
+
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 85; /* over the stage, under the lights, surtitles and top bar */
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--void-deep);
+  color: var(--ink);
+  transition: opacity 600ms var(--ease-stage);
+}
+
+.curtain--fading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Video curtain ---------- */
+.curtain__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The drawn curtain only shows without a playable video */
+.curtain:not(.curtain--drawn) .curtain__drape,
+.curtain:not(.curtain--drawn) .curtain__valance {
+  display: none;
+}
+
+.curtain--drawn .curtain__video {
+  display: none;
+}
+
+/* ---------- Drawn velvet ---------- */
+.curtain__drape {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.5%;
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 70%,
+      color-mix(in srgb, var(--void-deep) 55%, transparent)
+    ),
+    repeating-linear-gradient(
+      to right,
+      color-mix(in srgb, var(--crimson) 92%, var(--void-deep)) 0,
+      var(--crimson) 1.6vw,
+      color-mix(in srgb, var(--crimson) 55%, var(--void-deep)) 3.4vw,
+      color-mix(in srgb, var(--crimson) 82%, var(--void-deep)) 5vw
+    );
+  box-shadow: inset 0 0 12vw
+    color-mix(in srgb, var(--void-deep) 70%, transparent);
+  transition: transform 3200ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.curtain__drape--left {
+  left: 0;
+  transform-origin: left center;
+}
+
+.curtain__drape--right {
+  right: 0;
+  transform-origin: right center;
+}
+
+.curtain__valance {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12vh;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--crimson-soft) 60%, var(--void-deep)),
+    var(--crimson-soft)
+  );
+  box-shadow: 0 8px 32px color-mix(in srgb, var(--void-deep) 80%, transparent);
+  transition: transform 3200ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Opening: each half gathers towards its side, the valance lifts away */
+.curtain--opening .curtain__drape--left,
+.curtain--fading .curtain__drape--left {
+  transform: translateX(-92%) scaleX(0.35);
+}
+
+.curtain--opening .curtain__drape--right,
+.curtain--fading .curtain__drape--right {
+  transform: translateX(92%) scaleX(0.35);
+}
+
+.curtain--opening .curtain__valance,
+.curtain--fading .curtain__valance {
+  transform: translateY(-100%);
+}
+
+.curtain--opening,
+.curtain--fading {
+  background: transparent;
+}
+
+/* ---------- Playbill ---------- */
+.curtain__playbill {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-12) var(--gutter);
+  text-align: center;
+  transition:
+    opacity var(--dur-base) var(--ease-stage),
+    transform var(--dur-base) var(--ease-stage);
+}
+
+.curtain--opening .curtain__playbill,
+.curtain--fading .curtain__playbill {
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
+}
+
+.curtain__eyebrow,
+.curtain__role {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--chrome);
+}
+
+.curtain__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(72px, 14vw, 168px);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-shadow: 0 8px 48px color-mix(in srgb, var(--void-deep) 85%, transparent);
+}
+
+.curtain__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain,
+  .curtain__drape,
+  .curtain__valance,
+  .curtain__playbill {
+    transition: none;
+  }
+}

@@ -8,6 +8,13 @@
   background: var(--void);
 }
 
+/* Behind the closed curtain the Prologue waits: its entrances play as it opens */
+.portfolio--curtained main *,
+.portfolio--curtained main *::before,
+.portfolio--curtained main *::after {
+  animation-play-state: paused !important;
+}
+
 /* Every act: generous vertical rhythm, content in the container */
 .act {
   position: relative;

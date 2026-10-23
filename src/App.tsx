@@ -1,4 +1,5 @@
-import { useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 
 // Custom hooks
@@ -10,11 +11,15 @@ import Footer from './components/layout/Footer'
 
 // The journey
 import Stage from './theatre/Stage'
+import Curtain from './theatre/Curtain'
 import { LightsProvider, StageLights } from './theatre/lights'
-import { SoundProvider } from './theatre/sound'
+import { SoundProvider, useSound } from './theatre/sound'
 import { SurtitleProvider, Surtitles } from './theatre/surtitles'
 import { useStageNavigate } from './theatre/useStageNavigate'
-import { sceneForPath } from './theatre/scenes'
+import { useLine } from './theatre/useLine'
+import { curtainVideo } from './theatre/media'
+import { SCENES, sceneForPath, type SceneId } from './theatre/scenes'
+import { hasSeenCurtain, markCurtainSeen } from './theatre/storage'
 
 // ==========================================
 // THE PERFORMANCE — everything inside the theatre's providers
@@ -25,23 +30,71 @@ const Performance = () => {
   const { pathname } = useLocation()
   const scene = sceneForPath(pathname)
   const goTo = useStageNavigate()
+  const navigate = useNavigate()
+  const { setSoundOn, startMusic } = useSound()
+  const say = useLine()
+
+  // The curtain greets a first visit to the home page, once per session
+  const [curtain, setCurtain] = useState(
+    () => pathname === '/' && !hasSeenCurtain()
+  )
+  const [opening, setOpening] = useState(false)
+  const closed = curtain && !opening
+
+  // Music is wanted whenever the stage is open (it plays once sound is on)
+  useEffect(() => {
+    if (!curtain) startMusic()
+  }, [curtain, startMusic])
 
   // Scroll reveal animations
   useScrollReveal({ threshold: 96 })
 
+  const enter = (withSound: boolean) => {
+    setSoundOn(withSound)
+    markCurtainSeen()
+    setOpening(true)
+    say('curtain')
+  }
+
+  const skip = () => {
+    markCurtainSeen()
+    setCurtain(false)
+  }
+
+  // An act link over the closed curtain goes straight there, like a direct link
+  const bypass = (id: SceneId) => {
+    skip()
+    const target = SCENES.find((s) => s.id === id)
+    if (target) navigate(target.path)
+  }
+
   return (
-    <div className="portfolio">
+    <div className={closed ? 'portfolio portfolio--curtained' : 'portfolio'}>
       <a href="#main" className="skip-to-content">
         Skip to main content
       </a>
 
-      <Navigation active={scene.id} onNavigate={goTo} scrolled={scrolled} />
+      <Navigation
+        active={scene.id}
+        onNavigate={curtain ? bypass : goTo}
+        scrolled={scrolled}
+        intro={curtain}
+      />
 
-      <main id="main">
+      <main id="main" inert={closed}>
         <Stage onNavigate={goTo} />
       </main>
 
       <Footer />
+
+      {curtain ? (
+        <Curtain
+          onEnter={enter}
+          onSkip={skip}
+          onOpened={() => setCurtain(false)}
+          video={curtainVideo}
+        />
+      ) : null}
       <StageLights />
       <Surtitles />
     </div>
@@ -50,8 +103,8 @@ const Performance = () => {
 
 // ==========================================
 // MAIN APP COMPONENT
-// Prologue → Act I (About) → Act II (Skills) → Act III (Projects) → Act IV (Contact),
-// each its own scene and address
+// Curtain → Prologue → Act I (About) → Act II (Skills) → Act III (Projects)
+// → Act IV (Contact), each its own scene and address
 // ==========================================
 
 function App() {

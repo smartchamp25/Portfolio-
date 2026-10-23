@@ -110,4 +110,16 @@ describe('Navigation Component', () => {
     ).not.toBeInTheDocument()
     expect(container.querySelector('.site-header--intro')).toBeInTheDocument()
   })
+
+  it('stays dark over the curtain whatever the theme', () => {
+    const { container, rerender } = renderWithTheme(
+      <Navigation {...mockProps} intro />
+    )
+    expect(container.querySelector('header')).toHaveAttribute(
+      'data-theme',
+      'dark'
+    )
+    rerender(<Navigation {...mockProps} />)
+    expect(container.querySelector('header')).not.toHaveAttribute('data-theme')
+  })
 })

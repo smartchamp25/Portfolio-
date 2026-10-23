@@ -44,6 +44,8 @@ const Navigation = ({
   return (
     <header
       className={intro ? 'site-header site-header--intro' : 'site-header'}
+      // The intro is a darkened theatre in either theme
+      data-theme={intro ? 'dark' : undefined}
     >
       <NavBar
         brand="Marwan"
