@@ -33,13 +33,21 @@ describe('ProjectsSection Component', () => {
   it('renders the featured project with its badge', () => {
     render(<ProjectsSection {...mockProps} />)
     expect(screen.getByText('Featured')).toBeInTheDocument()
-    expect(screen.getByAltText(/The Wild Oasis/)).toBeInTheDocument()
+    expect(screen.getByAltText(/Airyona/)).toBeInTheDocument()
   })
 
   it('shows status instead of an image for unfinished work', () => {
-    render(<ProjectsSection {...mockProps} />)
+    const draft = {
+      id: 'draft',
+      title: 'Draft',
+      description: 'Still being built.',
+      tags: [],
+      status: 'In rehearsal',
+      featured: false,
+    }
+    render(<ProjectsSection projects={[...projects, draft]} />)
     expect(screen.getByText('In rehearsal')).toBeInTheDocument()
-    expect(screen.getAllByRole('img')).toHaveLength(1)
+    expect(screen.getAllByRole('img')).toHaveLength(projects.length)
   })
 
   it('renders project tags', () => {
@@ -51,14 +59,25 @@ describe('ProjectsSection Component', () => {
 
   it('links only to real URLs', () => {
     render(<ProjectsSection {...mockProps} />)
-    const source = screen.getByRole('link', { name: /Source/ })
-    expect(source).toHaveAttribute(
-      'href',
-      expect.stringContaining('github.com')
+    const live = screen.getAllByRole('link', { name: /Live demo/ })
+    expect(live).toHaveLength(projects.filter((p) => p.link).length)
+    live.forEach((a) =>
+      expect(a).toHaveAttribute('href', expect.stringMatching(/^https:\/\//))
     )
-    expect(
-      screen.queryByRole('link', { name: /Live demo/ })
-    ).not.toBeInTheDocument()
+    screen
+      .getAllByRole('link', { name: /Source/ })
+      .forEach((a) =>
+        expect(a).toHaveAttribute('href', expect.stringContaining('github.com'))
+      )
+  })
+
+  it('hides links a project does not have', () => {
+    render(
+      <ProjectsSection
+        projects={[{ ...projects[0], link: '#', github: undefined }]}
+      />
+    )
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })
 
   it('has proper section structure', () => {

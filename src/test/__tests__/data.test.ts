@@ -63,9 +63,9 @@ describe('Data Files', () => {
       expect(featured).toHaveLength(1)
     })
 
-    it('featured project is The Wild Oasis', () => {
+    it('featured project is Airyona', () => {
       const featured = projects.find((p) => p.featured)
-      expect(featured?.title).toBe('The Wild Oasis')
+      expect(featured?.title).toBe('Airyona')
     })
   })
 
