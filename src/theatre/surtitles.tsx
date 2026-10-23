@@ -19,8 +19,12 @@ export const SURTITLE_LINGER_MS = 1000
 export const SURTITLE_READ_MS = 3500
 
 interface SurtitlesApi {
-  /** Show `text` for `ms`; calling again replaces the text and the timer */
-  show: (text: string, ms: number) => void
+  /** Show `text` for `ms`; calling again replaces the text and the timer.
+   * Returns a token for this surtitle */
+  show: (text: string, ms: number) => number
+  /** Re-time the surtitle shown with `token` to clear `ms` from now; does
+   * nothing if another surtitle has replaced it since */
+  extend: (token: number, ms: number) => void
 }
 
 interface SurtitleState {
@@ -40,14 +44,32 @@ export const SurtitleProvider = ({ children }: { children: ReactNode }) => {
   const [text, setText] = useState<string | null>(null)
   const timer = useRef<number | null>(null)
 
-  const show = useCallback((next: string, ms: number) => {
+  const current = useRef(0)
+
+  const clearAfter = useCallback((ms: number) => {
     if (timer.current !== null) window.clearTimeout(timer.current)
-    setText(next)
     timer.current = window.setTimeout(() => {
       setText(null)
       timer.current = null
     }, ms)
   }, [])
+
+  const show = useCallback(
+    (next: string, ms: number) => {
+      current.current += 1
+      setText(next)
+      clearAfter(ms)
+      return current.current
+    },
+    [clearAfter]
+  )
+
+  const extend = useCallback(
+    (token: number, ms: number) => {
+      if (token === current.current) clearAfter(ms)
+    },
+    [clearAfter]
+  )
 
   useEffect(
     () => () => {
@@ -56,7 +78,7 @@ export const SurtitleProvider = ({ children }: { children: ReactNode }) => {
     []
   )
 
-  const api = useMemo(() => ({ show }), [show])
+  const api = useMemo(() => ({ show, extend }), [show, extend])
   const state = useMemo(() => ({ text }), [text])
 
   return (

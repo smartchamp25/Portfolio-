@@ -87,12 +87,13 @@ describe('act lines', () => {
     renderLine('/v.mp3')
     act(() => setSoundOn(true))
     await act(async () => say('projects'))
-    expect(playSpy).toHaveBeenCalledTimes(1)
+    const voice = played.slice(-1)[0]
+    expect(voice.src).toMatch(/\/v\.mp3$/)
     advance(5000)
     expect(screen.getByText(LINES.projects)).toBeInTheDocument()
 
     await act(async () => {
-      played[0].dispatchEvent(new Event('ended'))
+      voice.dispatchEvent(new Event('ended'))
     })
     expect(screen.getByText(LINES.projects)).toBeInTheDocument()
     advance(1000)
@@ -107,6 +108,17 @@ describe('act lines', () => {
     expect(screen.getByText(LINES.contact)).toBeInTheDocument()
     advance(3500)
     expect(screen.queryByText(LINES.contact)).not.toBeInTheDocument()
+  })
+
+  it('keeps the new surtitle when a line is interrupted', async () => {
+    renderLine('/v.mp3')
+    act(() => setSoundOn(true))
+    await act(async () => say('about'))
+    await act(async () => say('skills'))
+    expect(screen.getByText(LINES.skills)).toBeInTheDocument()
+    expect(screen.queryByText(LINES.about)).not.toBeInTheDocument()
+    advance(1000)
+    expect(screen.getByText(LINES.skills)).toBeInTheDocument()
   })
 
   describe('in the app', () => {

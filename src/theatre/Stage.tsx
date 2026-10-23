@@ -21,13 +21,15 @@ import { stats } from '../Data/stats'
 
 interface StageProps {
   onNavigate: (id: SceneId) => void
+  /** Arrow-key navigation; off while the curtain is closed */
+  keysEnabled?: boolean
 }
 
 // ==========================================
 // STAGE — one scene at a time, chosen by the address
 // ==========================================
 
-const Stage = ({ onNavigate }: StageProps) => {
+const Stage = ({ onNavigate, keysEnabled = true }: StageProps) => {
   const { pathname } = useLocation()
   const scene = sceneForPath(pathname)
 
@@ -40,7 +42,7 @@ const Stage = ({ onNavigate }: StageProps) => {
     canonical?.setAttribute('href', SITE_URL + scene.path)
   }, [scene])
 
-  useActKeys(scene.id, onNavigate)
+  useActKeys(scene.id, onNavigate, keysEnabled)
 
   // Each act's line, once per visit, as the light rises on it
   const say = useLine()

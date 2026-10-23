@@ -8,11 +8,13 @@ import { MemoryRouter } from 'react-router-dom'
 import App from '@/App'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { LINES } from '@/theatre/lines'
+import { voiceUrl } from '@/theatre/media'
 
-// A music file exists in these tests; voice and curtain video don't
+// A music file exists in these tests; the curtain video doesn't, and voice
+// files are absent unless a test provides them
 vi.mock('@/theatre/media', () => ({
   pickFile: () => undefined,
-  voiceUrl: () => undefined,
+  voiceUrl: vi.fn(() => undefined),
   musicUrl: '/m.mp3',
   curtainVideo: undefined,
 }))
@@ -146,6 +148,53 @@ describe('App curtain', () => {
     renderAt('/about')
     fireEvent.click(screen.getByRole('button', { name: 'Turn sound on' }))
     expect(played.some((el) => el.loop)).toBe(true)
+  })
+
+  it('speaks the opening line after "Take your seat"', async () => {
+    vi.mocked(voiceUrl).mockImplementation((id) => `/voice/${id}.mp3`)
+    const played: string[] = []
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockImplementation(function (
+      this: HTMLMediaElement
+    ) {
+      played.push(this.src)
+      return Promise.resolve()
+    })
+    renderAt('/')
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Take your seat' }))
+    })
+    expect(played.some((src) => src.endsWith('/voice/curtain.mp3'))).toBe(true)
+    vi.mocked(voiceUrl).mockImplementation(() => undefined)
+  })
+
+  it('still works when the browser blocks storage', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('blocked')
+    })
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('blocked')
+    })
+    renderAt('/')
+    expect(
+      screen.getByRole('button', { name: 'Take your seat' })
+    ).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Enter without sound' }))
+    act(() => vi.advanceTimersByTime(5000))
+    expect(
+      screen.getByRole('heading', { level: 1, name: /Marwan/ })
+    ).toBeInTheDocument()
+  })
+
+  it('ignores the arrow keys while the curtain is closed', () => {
+    renderAt('/')
+    fireEvent.keyDown(window, { key: 'ArrowRight' })
+    act(() => vi.advanceTimersByTime(1000))
+    expect(document.title).toBe('Marwan - Frontend Developer | Portfolio')
+    expect(screen.queryByText(LINES.about)).not.toBeInTheDocument()
+    expect(sessionStorage.getItem('theatre:line:about')).toBeNull()
+    expect(
+      screen.getByRole('button', { name: 'Take your seat' })
+    ).toBeInTheDocument()
   })
 
   it('plays the opening line on entry', () => {

@@ -47,10 +47,14 @@ export const useTheme = () => {
 // ==========================================
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  // Get initial theme from localStorage or default to dark
+  // Get initial theme from localStorage or default to dark (storage can be blocked)
   const [theme, setTheme] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme | null
-    return savedTheme || 'dark'
+    try {
+      const savedTheme = localStorage.getItem('theme')
+      return savedTheme === 'light' ? 'light' : 'dark'
+    } catch {
+      return 'dark'
+    }
   })
 
   const isTransitioning = useRef(false)
@@ -65,7 +69,11 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 
     // Set the new theme
     html.setAttribute('data-theme', theme)
-    localStorage.setItem('theme', theme)
+    try {
+      localStorage.setItem('theme', theme)
+    } catch {
+      // Storage blocked: the theme just won't be remembered
+    }
 
     // Remove transitioning class after animation completes
     const timeout = setTimeout(() => {

@@ -16,8 +16,8 @@ const UNTIL_VOICE_ENDS_MS = 60_000
 export const useLine = (
   resolveVoice: (id: LineId) => string | undefined = voiceUrl
 ): ((id: LineId) => void) => {
-  const { soundOn, playVoice } = useSound()
-  const { show } = useSurtitles()
+  const { isSoundOn, playVoice } = useSound()
+  const { show, extend } = useSurtitles()
 
   return useCallback(
     (id: LineId) => {
@@ -26,16 +26,17 @@ export const useLine = (
 
       const text = LINES[id]
       const url = resolveVoice(id)
-      if (!url || !soundOn) {
+      // Read the live sound state: it may have been switched on in this click
+      if (!url || !isSoundOn()) {
         show(text, SURTITLE_READ_MS)
         return
       }
 
-      show(text, UNTIL_VOICE_ENDS_MS)
+      const token = show(text, UNTIL_VOICE_ENDS_MS)
       void playVoice(url).then((played) =>
-        show(text, played === null ? SURTITLE_READ_MS : SURTITLE_LINGER_MS)
+        extend(token, played === null ? SURTITLE_READ_MS : SURTITLE_LINGER_MS)
       )
     },
-    [playVoice, resolveVoice, show, soundOn]
+    [extend, isSoundOn, playVoice, resolveVoice, show]
   )
 }

@@ -82,7 +82,7 @@ const Performance = () => {
       />
 
       <main id="main" inert={closed}>
-        <Stage onNavigate={goTo} />
+        <Stage onNavigate={goTo} keysEnabled={!curtain} />
       </main>
 
       <Footer />

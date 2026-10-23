@@ -14,13 +14,15 @@ const isTyping = (target: EventTarget | null): boolean => {
 
 /**
  * Left and right arrow keys move between scenes, unless the visitor is
- * typing or holding a modifier key
+ * typing or holding a modifier key, or the keys are switched off (curtain)
  */
 export const useActKeys = (
   current: SceneId,
-  onNavigate: (id: SceneId) => void
+  onNavigate: (id: SceneId) => void,
+  enabled = true
 ): void => {
   useEffect(() => {
+    if (!enabled) return
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) return
       if (isTyping(e.target)) return
@@ -34,5 +36,5 @@ export const useActKeys = (
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [current, onNavigate])
+  }, [current, onNavigate, enabled])
 }
