@@ -16,6 +16,11 @@
 
 .curtain--fading {
   opacity: 0;
+}
+
+/* Once opening, the page shows through and takes the clicks */
+.curtain--opening,
+.curtain--fading {
   pointer-events: none;
 }
 
@@ -28,10 +33,11 @@
   object-fit: cover;
 }
 
-/* The drawn curtain only shows without a playable video */
+/* The drawn curtain only shows without a playable video. It stays laid out
+   (closed) while hidden, so if the video fails it can still open from closed */
 .curtain:not(.curtain--drawn) .curtain__drape,
 .curtain:not(.curtain--drawn) .curtain__valance {
-  display: none;
+  visibility: hidden;
 }
 
 .curtain--drawn .curtain__video {
@@ -88,18 +94,18 @@
 }
 
 /* Opening: each half gathers towards its side, the valance lifts away */
-.curtain--opening .curtain__drape--left,
-.curtain--fading .curtain__drape--left {
+.curtain--drawn.curtain--opening .curtain__drape--left,
+.curtain--drawn.curtain--fading .curtain__drape--left {
   transform: translateX(-92%) scaleX(0.35);
 }
 
-.curtain--opening .curtain__drape--right,
-.curtain--fading .curtain__drape--right {
+.curtain--drawn.curtain--opening .curtain__drape--right,
+.curtain--drawn.curtain--fading .curtain__drape--right {
   transform: translateX(92%) scaleX(0.35);
 }
 
-.curtain--opening .curtain__valance,
-.curtain--fading .curtain__valance {
+.curtain--drawn.curtain--opening .curtain__valance,
+.curtain--drawn.curtain--fading .curtain__valance {
   transform: translateY(-100%);
 }
 

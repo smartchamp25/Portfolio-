@@ -3,7 +3,7 @@
 #
 #   scripts/encode-media.sh voice   <in-audio> <lineId>    -> src/assets/voice/<lineId>.mp3
 #   scripts/encode-media.sh music   <in-audio> [seconds=3] -> src/assets/music/theatre-loop.mp3
-#   scripts/encode-media.sh curtain <in-video>             -> src/assets/curtain/curtain.mp4
+#   scripts/encode-media.sh curtain <in-video> [seconds]   -> src/assets/curtain/curtain.mp4
 #                                                             + curtain-poster.webp
 #
 # lineId is one of: curtain about skills projects contact
@@ -55,14 +55,18 @@ music() {
 }
 
 curtain() {
-  local in=$1
+  local in=$1 length=${2:-}
   local dir="$root/src/assets/curtain"
   local out="$dir/curtain.mp4"
   mkdir -p "$dir"
-  local crf=28 limit=$((2 * 1024 * 1024))
+  # Start at high quality; lower it only if the file goes over 2 MB
+  local crf=20 limit=$((2 * 1024 * 1024))
+  # Optional trim; shrink to 1280 wide but never enlarge a smaller video
+  local trim=()
+  [ -n "$length" ] && trim=(-t "$length")
   while :; do
-    ff -i "$in" -vf "scale=1280:-2" -an -c:v libx264 -preset slow -crf "$crf" \
-      -pix_fmt yuv420p -movflags +faststart "$out"
+    ff -i "$in" "${trim[@]}" -vf "scale='min(1280,iw)':-2" -an -c:v libx264 \
+      -preset slow -crf "$crf" -pix_fmt yuv420p -movflags +faststart "$out"
     [ "$(wc -c <"$out")" -le "$limit" ] && break
     crf=$((crf + 2))
     [ "$crf" -le 40 ] || die "could not get the curtain under 2 MB"
@@ -79,6 +83,6 @@ shift || true
 case $cmd in
   voice) [ $# -eq 2 ] || die "usage: voice <in-audio> <lineId>"; voice "$@" ;;
   music) [ $# -ge 1 ] || die "usage: music <in-audio> [seconds]"; music "$@" ;;
-  curtain) [ $# -eq 1 ] || die "usage: curtain <in-video>"; curtain "$@" ;;
+  curtain) [ $# -ge 1 ] || die "usage: curtain <in-video> [seconds]"; curtain "$@" ;;
   *) die "usage: encode-media.sh voice|music|curtain …" ;;
 esac
