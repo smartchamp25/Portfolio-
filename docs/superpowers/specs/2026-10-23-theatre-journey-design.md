@@ -238,7 +238,7 @@ both themes.
   opening an act in a new tab works.
 - Updating the sitemap, adding per-scene page titles, the Vercel rewrite, and
   updating tests that assume one scrolling page.
-- _My call:_ the live domain is not known yet (`index.html`, `sitemap.xml` and
-  `robots.txt` still use the placeholder `yourportfolio.vercel.app`). Keep the
-  site address in one constant, give each scene its own canonical link built
-  from it, and swap in the real domain when Marwan provides it.
+- The site address lives in one constant, and each scene gets its own
+  canonical link built from it. The live domain is `marwan-dev.vercel.app`
+  (Marwan's choice, 2026-10-24), also used in `index.html`, `sitemap.xml` and
+  `robots.txt`.
