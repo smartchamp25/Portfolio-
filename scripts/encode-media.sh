@@ -48,9 +48,17 @@ music() {
   cut=$(awk -v l="$length" -v f="$fade" 'BEGIN { printf "%.3f", l - f }')
   # Loop point: the track's last seconds (B) crossfade into its start (A), so
   # the file's end runs straight on into its beginning when it repeats
-  ff -i "$in" -filter_complex \
-    "[0:a]atrim=0:$cut,asetpts=PTS-STARTPTS[a];[0:a]atrim=$cut,asetpts=PTS-STARTPTS[b];[b][a]acrossfade=d=$fade:c1=tri:c2=tri,loudnorm=I=-20:TP=-1.5[out]" \
-    -map "[out]" -ac 2 -c:a libmp3lame -b:a 128k "$out"
+  local loop="[0:a]atrim=0:$cut,asetpts=PTS-STARTPTS[a];[0:a]atrim=$cut,asetpts=PTS-STARTPTS[b];[b][a]acrossfade=d=$fade:c1=tri:c2=tri"
+  # One steady gain, so quiet passages stay quiet: aim for -20 LUFS, but never
+  # push the true peak past -1.5 dB
+  local gain
+  gain=$(ffmpeg -hide_banner -nostats -i "$in" -filter_complex \
+    "$loop,loudnorm=print_format=json[out]" -map "[out]" -f null - 2>&1 |
+    awk -F'"' '/"input_i"/ { i = $4 } /"input_tp"/ { tp = $4 }
+      END { g = -20 - i; if (tp + g > -1.5) g = -1.5 - tp; printf "%.2f", g }')
+  ff -i "$in" -filter_complex "$loop,volume=${gain}dB[out]" -map "[out]" \
+    -ac 2 -ar 44100 -c:a libmp3lame -b:a 128k "$out"
+  echo "gain ${gain} dB"
   report "$out"
 }
 

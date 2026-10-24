@@ -16,7 +16,8 @@ const Footer = () => {
       className="site-footer"
       name="Marwan"
       note="Designed and built with care — every pixel placed on purpose."
-      fine={`© ${year} Marwan · React · Vite · TypeScript`}
+      // Jhin's voice lines are Riot's; their fan-content policy asks for this
+      fine={`© ${year} Marwan · React · Vite · TypeScript · This portfolio was created under Riot Games’ “Legal Jibber Jabber” policy using assets owned by Riot Games. Riot Games does not endorse or sponsor this project.`}
     >
       <IconButton
         size="sm"

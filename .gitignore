@@ -27,6 +27,3 @@ coverage
 *.sw?
 
 .vercel
-
-# Draft voice lines stay local (non-commercial licence)
-src/assets/voice/

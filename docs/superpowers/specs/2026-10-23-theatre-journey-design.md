@@ -70,14 +70,14 @@ without ever getting between a recruiter and the work.
   `theatre-journey`. The live site on `main` stays as it is until Marwan's
   curtain video and music exist; then the branch is merged once. The GitHub
   repo is public, so anything committed, even on the branch, is published.
-- Audio licensing: the draft voice (Piper "Ryan") is licensed CC BY-NC-SA,
-  non-commercial, so it is a placeholder only. Decided by Marwan: the Piper
-  files never enter the repo. They stay on Marwan's machine for local testing
-  (their folder is git-ignored), and the site plays a line only when a voice
-  file for it is present in the build. Until the final voice exists, every
-  build from the repo, including the merged live site, has no spoken lines. Riot's own Jhin voice or League
-  music may only be used if Marwan decides so, and then with the disclaimer
-  Riot's fan-content policy requires, shown in the footer.
+- Audio licensing, decided by Marwan (2026-10-24): the voice is Jhin's own,
+  his original in-game lines from League of Legends, used under Riot Games'
+  "Legal Jibber Jabber" fan-content policy. The site stays free and
+  non-commercial, and the footer carries Riot's required disclaimer. Claude
+  flagged that a portfolio meant to win work is a grey area under that
+  policy; Marwan chose it knowingly. The voice files are committed to the
+  repo. The earlier Piper drafts (CC BY-NC-SA) are retired. The music is a
+  public-domain recording (see Assets).
 
 ## The experience
 
@@ -135,16 +135,20 @@ without ever getting between a recruiter and the work.
 
 ### 4. Act lines
 
-| Moment                     | Line (draft)                                      |
-| -------------------------- | ------------------------------------------------- |
-| Curtain opens              | "And now… the curtain rises."                     |
-| Act I · The Creator        | "Every masterpiece… begins with a single stroke." |
-| Act II · The Arsenal       | "Each instrument… chosen with care."              |
-| Act III · The Masterpieces | "Behold. The work… speaks for itself."            |
-| Act IV · The Encore        | "Every performance… deserves an encore."          |
+| Moment                     | Jhin's line                                    | Wiki voice file                 |
+| -------------------------- | ---------------------------------------------- | ------------------------------- |
+| Curtain opens              | "And now, the curtain rises."                  | `Jhin_Original_MoveFirst_0.ogg` |
+| Act I · The Creator        | "Only to the audience do I show my true face." | `Jhin_Original_Move_44.ogg`     |
+| Act II · The Arsenal       | "Every element must be in place."              | `Jhin_Original_Move_64.ogg`     |
+| Act III · The Masterpieces | "The work is what matters."                    | `Jhin_Original_Move_18.ogg`     |
+| Act IV · The Encore        | "My audience awaits."                          | `Jhin_Original_Move_17.ogg`     |
 
-An alternative original opening line was also drafted: "Take your seat. The
-performance… begins." Marwan may swap it in later; it is a text and file change.
+Chosen by Marwan from Jhin's real lines, avoiding the ones about killing and
+death. The files come from the League of Legends wiki
+(`wiki.leagueoflegends.com/en-us/images/<file>`). Each clip is cut 0.35 s after
+its last word with a fade, removing the low reverb tail of the game recording,
+then encoded with `scripts/encode-media.sh voice`. Swapping a line is a file
+change: the site plays `src/assets/voice/<line id>.mp3`.
 
 - Each line plays at most once per session per act, the first time it can be
   heard: a line missed with sound off plays on a later visit to that act once
@@ -188,18 +192,16 @@ both themes.
 
 ## Assets
 
-| Asset                                                                                    | Who                                                                            | Status                 | For the web                                                                 |
-| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ---------------------- | --------------------------------------------------------------------------- |
-| Curtain video: crimson velvet curtain on a dark stage, opening, static camera, about 5 s | Marwan, Midjourney Animate                                                     | to make                | MP4 (H.264), at most about 2 MB, plus a closed-curtain poster frame as WebP |
-| Voice lines (6)                                                                          | Piper drafts now; final voice later (ElevenLabs, own recording or voice actor) | drafts made, see below | MP3 mono, about 64 kbps, about 30 KB each                                   |
-| Music loop, 1–3 min, theatre mood (dark waltz, piano, strings)                           | Marwan (Pixabay Music, Musopen or other licensed source)                       | to source              | MP3 stereo 128 kbps, at most about 3 MB, loop point crossfaded              |
-| Optional sound effects: curtain swoosh, audience murmur on the choice screen             | Freesound (CC0) or Pixabay                                                     | optional               | MP3, short                                                                  |
-| Lotus layers (outer, inner, sphere)                                                      | cut out from Marwan's Midjourney image                                         | made                   | WebP with transparency, about 288 px square                                 |
+| Asset                                                                                    | Who                                                       | Status   | For the web                                                                                       |
+| ---------------------------------------------------------------------------------------- | --------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------- |
+| Curtain video: crimson velvet curtain on a dark stage, opening, static camera, about 5 s | Marwan, Midjourney Animate                                | in       | MP4 (H.264), at most about 2 MB, plus a closed-curtain poster frame as WebP                       |
+| Voice lines (5)                                                                          | Jhin's original in-game lines (Riot Games), see section 4 | in       | MP3 mono, about 64 kbps, 19–33 KB each                                                            |
+| Music loop: Chopin, Nocturne No. 20 in C-sharp minor (B. 49), played by Frank Lévy       | Wikimedia Commons, public domain, no credit needed        | in       | MP3 stereo 128 kbps, 3.4 MB, 3:43; one steady gain, the natural ending rings out into the opening |
+| Optional sound effects: curtain swoosh, audience murmur on the choice screen             | Freesound (CC0) or Pixabay                                | optional | MP3, short                                                                                        |
+| Lotus layers (outer, inner, sphere)                                                      | cut out from Marwan's Midjourney image                    | made     | WebP with transparency, about 288 px square                                                       |
 
-- Draft voice files (theatre-processed WAV) currently live in the session
-  scratchpad (`voice-drafts/theatre/`); the lotus master and layers in
-  `lotus/`; the original Midjourney lotus PNG in `C:\Users\G15 - 5511\Work\Marwan`.
-  The builder copies what is needed into the project.
+- The original Midjourney lotus PNG is in `C:\Users\G15 - 5511\Work\Marwan`,
+  and the curtain source videos are in its `Curtian` folder.
 - Converting audio and video uses ffmpeg (Marwan approved installing it).
 - While the curtain video and music don't exist yet, the branch uses
   stand-ins: a code-drawn curtain so the flow can be built and tested, and
@@ -213,9 +215,8 @@ both themes.
 - A journey of scenes rather than one long scroll; moving between acts uses
   Claude's recommendation (lighting change, own address per act, direct links
   skip the intro).
-- Voice and music: Marwan sources the final assets; Piper drafts are fine as
-  local placeholders, kept out of the public repo; builds from the repo have
-  no spoken lines until the final voice exists (surtitles were dropped).
+- Voice and music: Jhin's real lines with Riot's disclaimer, and a
+  public-domain Chopin nocturne (2026-10-24). Surtitles were dropped.
 - Build on a branch and merge once the curtain video and music exist.
 - ffmpeg may be installed for converting audio and video.
 - A realistic lotus made in Midjourney (the arming movement was recommended;

@@ -13,6 +13,14 @@ import {
 } from '@/theatre/sound'
 import SoundToggle from '@/theatre/SoundToggle'
 
+// The site has no music file in these tests unless one is passed in
+vi.mock('@/theatre/media', () => ({
+  pickFile: () => undefined,
+  voiceUrl: () => undefined,
+  musicUrl: undefined,
+  curtainVideo: undefined,
+}))
+
 type SoundApi = ReturnType<typeof useSound>
 let sound!: SoundApi
 

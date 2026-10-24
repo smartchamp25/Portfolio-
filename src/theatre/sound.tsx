@@ -14,8 +14,9 @@ import {
 import { musicUrl } from './media'
 import { setSoundPreference } from './storage'
 
-export const MUSIC_VOLUME = 0.35
-export const MUSIC_DUCKED = 0.12
+export const MUSIC_VOLUME = 0.5
+/** Under a line: the same dip as before (about a third), so the voice stays clear */
+export const MUSIC_DUCKED = 0.17
 export const MUSIC_FADE_MS = 2000
 /** How quickly the music comes back up after a line */
 export const MUSIC_RECOVER_MS = 400
