@@ -4,10 +4,10 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, fireEvent, act } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import App from '@/App'
 import { ThemeProvider } from '@/contexts/ThemeContext'
-import { LINES } from '@/theatre/lines'
 import { voiceUrl } from '@/theatre/media'
 
 // A music file exists in these tests; the curtain video doesn't, and voice
@@ -206,16 +206,31 @@ describe('App curtain', () => {
     fireEvent.keyDown(window, { key: 'ArrowRight' })
     act(() => vi.advanceTimersByTime(1000))
     expect(document.title).toBe('Marwan - Frontend Developer | Portfolio')
-    expect(screen.queryByText(LINES.about)).not.toBeInTheDocument()
     expect(sessionStorage.getItem('theatre:line:about')).toBeNull()
     expect(
       screen.getByRole('button', { name: 'Take your seat' })
     ).toBeInTheDocument()
   })
 
-  it('plays the opening line on entry', () => {
+  it('never puts a line on screen as text', async () => {
+    vi.mocked(voiceUrl).mockImplementation((id) => `/voice/${id}.mp3`)
     renderAt('/')
-    fireEvent.click(screen.getByRole('button', { name: 'Enter without sound' }))
-    expect(screen.getByText(LINES.curtain)).toBeInTheDocument()
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Take your seat' }))
+    })
+    expect(screen.queryByText(/curtain rises/)).not.toBeInTheDocument()
+    vi.mocked(voiceUrl).mockImplementation(() => undefined)
+  })
+
+  it('reaches the curtain first with the keyboard', async () => {
+    // user-event waits on real timers between steps
+    vi.useRealTimers()
+    const user = userEvent.setup()
+    renderAt('/')
+    expect(
+      screen.getByRole('button', { name: 'Take your seat' })
+    ).not.toHaveFocus()
+    await user.tab()
+    expect(screen.getByRole('button', { name: 'Take your seat' })).toHaveFocus()
   })
 })

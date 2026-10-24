@@ -5,7 +5,7 @@
 .curtain {
   position: fixed;
   inset: 0;
-  z-index: 85; /* over the stage, under the lights, surtitles and top bar */
+  z-index: 85; /* over the stage, under the lights and top bar */
   display: grid;
   place-items: center;
   overflow: hidden;

@@ -1,10 +1,10 @@
 /**
- * Act lines: once per visit, voice when possible, surtitle always
+ * Act lines: spoken once per visit, the first time they can be heard
  */
 
 import { useEffect } from 'react'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { render, screen, act } from '@testing-library/react'
+import { render, screen, act, fireEvent } from '@testing-library/react'
 import {
   MemoryRouter,
   useNavigate,
@@ -13,10 +13,16 @@ import {
 import App from '@/App'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { SoundProvider, useSound } from '@/theatre/sound'
-import { SurtitleProvider, Surtitles } from '@/theatre/surtitles'
 import { useLine } from '@/theatre/useLine'
-import { LINES } from '@/theatre/lines'
 import type { LineId } from '@/theatre/scenes'
+
+// In the app every line has a voice file in these tests
+vi.mock('@/theatre/media', () => ({
+  pickFile: () => undefined,
+  voiceUrl: (id: string) => `/voice/${id}.mp3`,
+  musicUrl: undefined,
+  curtainVideo: undefined,
+}))
 
 let say!: (id: LineId) => void
 let setSoundOn!: (on: boolean) => void
@@ -34,29 +40,27 @@ const Probe = ({ voice }: { voice?: string }) => {
 const renderLine = (voice?: string) =>
   render(
     <SoundProvider musicSrc={undefined}>
-      <SurtitleProvider>
-        <Probe voice={voice} />
-        <Surtitles />
-      </SurtitleProvider>
+      <Probe voice={voice} />
     </SoundProvider>
   )
 
-const advance = (ms: number) => act(() => vi.advanceTimersByTime(ms))
-
 describe('act lines', () => {
-  let played: HTMLMediaElement[]
-  let playSpy: ReturnType<typeof vi.spyOn>
+  let played: string[]
+
+  /** How many times a voice file was played */
+  const plays = (file: string) =>
+    played.filter((src) => src.endsWith(file)).length
 
   beforeEach(() => {
     vi.useFakeTimers()
     sessionStorage.clear()
     played = []
-    playSpy = vi
-      .spyOn(HTMLMediaElement.prototype, 'play')
-      .mockImplementation(function (this: HTMLMediaElement) {
-        played.push(this)
-        return Promise.resolve()
-      })
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockImplementation(function (
+      this: HTMLMediaElement
+    ) {
+      played.push(this.src)
+      return Promise.resolve()
+    })
   })
 
   afterEach(() => {
@@ -64,100 +68,73 @@ describe('act lines', () => {
     vi.restoreAllMocks()
   })
 
-  it('shows the line once per session', () => {
-    renderLine()
-    act(() => say('about'))
-    expect(screen.getByText(LINES.about)).toBeInTheDocument()
-    advance(3500)
-    act(() => say('about'))
-    expect(screen.queryByText(LINES.about)).not.toBeInTheDocument()
-    expect(sessionStorage.getItem('theatre:line:about')).toBe('1')
-  })
-
-  it('shows a surtitle without sound', () => {
-    renderLine('/v.mp3')
-    act(() => say('skills'))
-    expect(screen.getByText(LINES.skills)).toBeInTheDocument()
-    expect(playSpy).not.toHaveBeenCalled()
-    advance(3500)
-    expect(screen.queryByText(LINES.skills)).not.toBeInTheDocument()
-  })
-
-  it('plays the voice when sound is on', async () => {
-    renderLine('/v.mp3')
-    act(() => setSoundOn(true))
-    await act(async () => say('projects'))
-    const voice = played.slice(-1)[0]
-    expect(voice.src).toMatch(/\/v\.mp3$/)
-    advance(5000)
-    expect(screen.getByText(LINES.projects)).toBeInTheDocument()
-
-    await act(async () => {
-      voice.dispatchEvent(new Event('ended'))
-    })
-    expect(screen.getByText(LINES.projects)).toBeInTheDocument()
-    advance(1000)
-    expect(screen.queryByText(LINES.projects)).not.toBeInTheDocument()
-  })
-
-  it('falls back to text when the voice fails', async () => {
-    renderLine('/v.mp3')
-    act(() => setSoundOn(true))
-    playSpy.mockImplementation(() => Promise.reject(new Error('blocked')))
-    await act(async () => say('contact'))
-    expect(screen.getByText(LINES.contact)).toBeInTheDocument()
-    advance(3500)
-    expect(screen.queryByText(LINES.contact)).not.toBeInTheDocument()
-  })
-
-  it('keeps the new surtitle when a line is interrupted', async () => {
+  it('plays the voice once per session when sound is on', async () => {
     renderLine('/v.mp3')
     act(() => setSoundOn(true))
     await act(async () => say('about'))
+    await act(async () => say('about'))
+    expect(plays('/v.mp3')).toBe(1)
+  })
+
+  it('stays silent without sound', async () => {
+    renderLine('/v.mp3')
     await act(async () => say('skills'))
-    expect(screen.getByText(LINES.skills)).toBeInTheDocument()
-    expect(screen.queryByText(LINES.about)).not.toBeInTheDocument()
-    advance(1000)
-    expect(screen.getByText(LINES.skills)).toBeInTheDocument()
+    expect(plays('/v.mp3')).toBe(0)
+  })
+
+  it('speaks a line missed without sound once sound is on', async () => {
+    renderLine('/v.mp3')
+    await act(async () => say('skills'))
+    act(() => setSoundOn(true))
+    await act(async () => say('skills'))
+    expect(plays('/v.mp3')).toBe(1)
+  })
+
+  it('stays silent when the line has no voice', async () => {
+    renderLine(undefined)
+    act(() => setSoundOn(true))
+    await act(async () => say('contact'))
+    expect(sessionStorage.getItem('theatre:line:contact')).toBeNull()
   })
 
   describe('in the app', () => {
+    let navigate!: NavigateFunction
+    const History = () => {
+      const nav = useNavigate()
+      useEffect(() => {
+        navigate = nav
+      }, [nav])
+      return null
+    }
+
     beforeEach(() => sessionStorage.setItem('theatre:curtain-seen', '1'))
 
-    it('plays the act line on arrival', () => {
+    const renderApp = (entries: string[]) =>
       render(
-        <MemoryRouter initialEntries={['/skills']}>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </MemoryRouter>
-      )
-      expect(screen.getByText(LINES.skills)).toBeInTheDocument()
-    })
-
-    it('does not repeat a line on back and forward', () => {
-      let navigate!: NavigateFunction
-      const History = () => {
-        const nav = useNavigate()
-        useEffect(() => {
-          navigate = nav
-        }, [nav])
-        return null
-      }
-      render(
-        <MemoryRouter initialEntries={['/about', '/skills']} initialIndex={0}>
+        <MemoryRouter initialEntries={entries} initialIndex={0}>
           <ThemeProvider>
             <App />
             <History />
           </ThemeProvider>
         </MemoryRouter>
       )
-      expect(screen.getByText(LINES.about)).toBeInTheDocument()
-      advance(3500)
-      act(() => navigate(1))
-      expect(screen.getByText(LINES.skills)).toBeInTheDocument()
-      act(() => navigate(-1))
-      expect(screen.queryByText(LINES.about)).not.toBeInTheDocument()
+
+    it('plays the act line on arrival', async () => {
+      renderApp(['/'])
+      fireEvent.click(screen.getByRole('button', { name: 'Turn sound on' }))
+      fireEvent.click(screen.getByRole('link', { name: 'Skills' }))
+      await act(async () => vi.advanceTimersByTime(1000))
+      expect(plays('/voice/skills.mp3')).toBe(1)
+    })
+
+    it('does not repeat a line on back and forward', async () => {
+      renderApp(['/', '/about', '/skills'])
+      fireEvent.click(screen.getByRole('button', { name: 'Turn sound on' }))
+      await act(async () => navigate(1))
+      await act(async () => navigate(1))
+      await act(async () => navigate(-1))
+      expect(plays('/voice/about.mp3')).toBe(1)
+      expect(plays('/voice/skills.mp3')).toBe(1)
     })
   })
 })

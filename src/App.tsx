@@ -14,7 +14,6 @@ import Stage from './theatre/Stage'
 import Curtain from './theatre/Curtain'
 import { LightsProvider, StageLights } from './theatre/lights'
 import { SoundProvider, useSound } from './theatre/sound'
-import { SurtitleProvider, Surtitles } from './theatre/surtitles'
 import { useStageNavigate } from './theatre/useStageNavigate'
 import { useLine } from './theatre/useLine'
 import { curtainVideo } from './theatre/media'
@@ -62,6 +61,17 @@ const Performance = () => {
 
   return (
     <div className={closed ? 'portfolio portfolio--curtained' : 'portfolio'}>
+      {/* First in the page, so the keyboard reaches it before anything else */}
+      {curtain ? (
+        <Curtain
+          onEnter={enter}
+          onSkip={skip}
+          onReveal={() => setRevealed(true)}
+          onOpened={() => setCurtain(false)}
+          video={curtainVideo}
+        />
+      ) : null}
+
       <a href="#main" className="skip-to-content">
         Skip to main content
       </a>
@@ -79,17 +89,7 @@ const Performance = () => {
 
       <Footer />
 
-      {curtain ? (
-        <Curtain
-          onEnter={enter}
-          onSkip={skip}
-          onReveal={() => setRevealed(true)}
-          onOpened={() => setCurtain(false)}
-          video={curtainVideo}
-        />
-      ) : null}
       <StageLights />
-      <Surtitles />
     </div>
   )
 }
@@ -103,11 +103,9 @@ const Performance = () => {
 function App() {
   return (
     <SoundProvider>
-      <SurtitleProvider>
-        <LightsProvider>
-          <Performance />
-        </LightsProvider>
-      </SurtitleProvider>
+      <LightsProvider>
+        <Performance />
+      </LightsProvider>
     </SoundProvider>
   )
 }

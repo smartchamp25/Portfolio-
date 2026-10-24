@@ -102,7 +102,6 @@ const Curtain = ({
       variant={soundFirst ? 'primary' : 'ghost'}
       size="lg"
       onClick={() => choose(true)}
-      autoFocus={soundFirst}
     >
       Take your seat
     </Button>
@@ -113,7 +112,6 @@ const Curtain = ({
       variant={soundFirst ? 'ghost' : 'primary'}
       size="lg"
       onClick={() => choose(false)}
-      autoFocus={!soundFirst}
     >
       Enter without sound
     </Button>

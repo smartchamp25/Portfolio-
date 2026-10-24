@@ -54,11 +54,11 @@ describe('Curtain', () => {
     window.matchMedia = original
   })
 
-  it('offers both ways in and a skip', () => {
+  it('offers both ways in and a skip, without grabbing focus', () => {
     setup()
     const seat = screen.getByRole('button', { name: 'Take your seat' })
     expect(seat).toHaveClass('fa-btn--primary')
-    expect(seat).toHaveFocus()
+    expect(seat).not.toHaveFocus()
     expect(
       screen.getByRole('button', { name: 'Enter without sound' })
     ).toBeInTheDocument()

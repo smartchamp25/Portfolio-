@@ -24,8 +24,9 @@ without ever getting between a recruiter and the work.
 2. The site is a sequence of scenes (Prologue, Act I About, Act II Skills,
    Act III Projects, Act IV Contact) moved between with a theatrical lighting
    change, not a long scroll.
-3. Each act is introduced once per visit by a spoken line with an on-screen
-   surtitle.
+3. Each act is introduced once per visit by a spoken line. Nothing is shown
+   on screen: the visitor lives the moment, it is not a film with subtitles
+   (Marwan's call, 2026-10-24).
 4. Visitors who arrive by a direct link, or who are in a hurry, reach any act
    in a couple of seconds.
 5. The site stays fast, accessible and stable: these numbers are claimed on
@@ -74,7 +75,7 @@ without ever getting between a recruiter and the work.
   files never enter the repo. They stay on Marwan's machine for local testing
   (their folder is git-ignored), and the site plays a line only when a voice
   file for it is present in the build. Until the final voice exists, every
-  build from the repo, including the merged live site, shows surtitles only. Riot's own Jhin voice or League
+  build from the repo, including the merged live site, has no spoken lines. Riot's own Jhin voice or League
   music may only be used if Marwan decides so, and then with the disclaimer
   Riot's fan-content policy requires, shown in the footer.
 
@@ -101,16 +102,14 @@ without ever getting between a recruiter and the work.
 ### 2. The opening
 
 - After "Take your seat": the curtain video plays; the opening line
-  _"And now… the curtain rises."_ plays in time with it and appears as a
-  surtitle. While the curtains are still parting (the last 1.2 s of the clip),
+  _"And now… the curtain rises."_ plays in time with it. While the curtains are still parting (the last 1.2 s of the clip),
   the view pushes forward through the gap as the curtain dissolves, and the
   Prologue (the current hero) plays its entrance on the stage behind it, with
   the top bar arriving alongside. The page stays still and out of reach until
   that moment. In the light theme the house lights come up: the curtain
   brightens to the page as it clears. Once it is gone, the music fades in over
   about 2 seconds and loops.
-- After "Enter without sound": the same curtain video plays silently, and the
-  surtitle still appears.
+- After "Enter without sound": the same curtain video plays silently.
 - A sound toggle (speaker icon, Fourth Act `IconButton`) stays in the top bar
   next to the theme toggle on every scene, including after a direct link.
 
@@ -128,13 +127,13 @@ without ever getting between a recruiter and the work.
 - The lighting change, about one second in total: the current scene dims to
   black (about 350 ms), the new scene is swapped in at its top, then a
   spotlight opens from the centre and widens to reveal it (about 650 ms). The
-  act's line and surtitle start as the light rises.
+  act's line starts as the light rises.
 - A scene taller than the screen (Projects) scrolls within itself. The
   existing fade-up reveals inside scenes stay.
 - Each scene sets its own page title, and focus moves to the scene's heading
   so screen-reader and keyboard users land in the right place.
 
-### 4. Act lines and surtitles
+### 4. Act lines
 
 | Moment                     | Line (draft)                                      |
 | -------------------------- | ------------------------------------------------- |
@@ -147,11 +146,11 @@ without ever getting between a recruiter and the work.
 An alternative original opening line was also drafted: "Take your seat. The
 performance… begins." Marwan may swap it in later; it is a text and file change.
 
-- Each line plays at most once per session per act. The Prologue has no line
-  of its own beyond the opening.
-- Surtitles are real text, shown whether or not sound is on, styled like
-  theatre surtitles (Fourth Act display serif, italic), announced politely to
-  screen readers, and gone after the line ends plus about a second.
+- Each line plays at most once per session per act, the first time it can be
+  heard: a line missed with sound off plays on a later visit to that act once
+  sound is on. The Prologue has no line of its own beyond the opening.
+- No surtitles (Marwan's call, 2026-10-24): lines are voice only, with plain
+  voice, no theatre echo or reverb.
 - While a line plays, the music dips to about a third of its volume, then
   returns.
 
@@ -170,8 +169,7 @@ performance… begins." Marwan may swap it in later; it is a text and file chang
 
 With "reduce motion" set on the device: no curtain animation (the choice
 screen fades straight to the Prologue), scene changes become a quick
-crossfade, and the lotus does not animate. Sound and surtitles behave as
-normal.
+crossfade, and the lotus does not animate. Sound behaves as normal.
 
 ### 7. The lotus trap (also in scope)
 
@@ -216,8 +214,8 @@ both themes.
   Claude's recommendation (lighting change, own address per act, direct links
   skip the intro).
 - Voice and music: Marwan sources the final assets; Piper drafts are fine as
-  local placeholders, kept out of the public repo, with surtitles only in
-  any build from the repo until the final voice exists.
+  local placeholders, kept out of the public repo; builds from the repo have
+  no spoken lines until the final voice exists (surtitles were dropped).
 - Build on a branch and merge once the curtain video and music exist.
 - ffmpeg may be installed for converting audio and video.
 - A realistic lotus made in Midjourney (the arming movement was recommended;
