@@ -10,11 +10,24 @@ const setup = (video?: { src: string; poster?: string }) => {
   const props = {
     onEnter: vi.fn(),
     onSkip: vi.fn(),
+    onReveal: vi.fn(),
     onOpened: vi.fn(),
     video,
   }
   render(<Curtain {...props} />)
   return props
+}
+
+/** Moves the curtain video's clock and tells the curtain about it */
+const playTo = (video: HTMLVideoElement, seconds: number) => {
+  Object.defineProperty(video, 'duration', { value: 4.6, configurable: true })
+  Object.defineProperty(video, 'currentTime', {
+    value: seconds,
+    configurable: true,
+  })
+  act(() => {
+    video.dispatchEvent(new Event('timeupdate'))
+  })
 }
 
 const reduceMotion = (on: boolean) => {
@@ -62,13 +75,32 @@ describe('Curtain', () => {
     ).toHaveClass('fa-btn--primary')
   })
 
-  it('reports the choice, then opens', () => {
+  it('reports the choice, reveals the stage, then opens', () => {
     const props = setup()
     fireEvent.click(screen.getByRole('button', { name: 'Take your seat' }))
     expect(props.onEnter).toHaveBeenCalledWith(true)
-    act(() => vi.advanceTimersByTime(CURTAIN_OPEN_MS + CURTAIN_FADE_MS - 1))
+    act(() => vi.advanceTimersByTime(CURTAIN_OPEN_MS - 1))
+    expect(props.onReveal).not.toHaveBeenCalled()
+    act(() => vi.advanceTimersByTime(1))
+    expect(props.onReveal).toHaveBeenCalledTimes(1)
+    act(() => vi.advanceTimersByTime(CURTAIN_FADE_MS - 1))
     expect(props.onOpened).not.toHaveBeenCalled()
     act(() => vi.advanceTimersByTime(1))
+    expect(props.onOpened).toHaveBeenCalledTimes(1)
+  })
+
+  it('reveals the stage while the video is still playing', async () => {
+    const props = setup({ src: '/c.mp4' })
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Take your seat' }))
+    })
+    const video = document.querySelector('video')!
+    playTo(video, 1)
+    expect(props.onReveal).not.toHaveBeenCalled()
+    playTo(video, 4.1)
+    expect(props.onReveal).toHaveBeenCalledTimes(1)
+    expect(props.onOpened).not.toHaveBeenCalled()
+    act(() => vi.advanceTimersByTime(CURTAIN_FADE_MS))
     expect(props.onOpened).toHaveBeenCalledTimes(1)
   })
 

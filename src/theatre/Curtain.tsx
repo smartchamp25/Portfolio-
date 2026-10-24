@@ -8,8 +8,11 @@ import './Curtain.css'
 
 /** The drawn curtain's opening, when there is no video */
 export const CURTAIN_OPEN_MS = 3200
-/** The curtain fading away once open */
-export const CURTAIN_FADE_MS = 600
+/** The push through the parted curtain onto the stage */
+export const CURTAIN_FADE_MS = 1200
+/** A video curtain starts the push as long before its clip ends as the push
+    lasts, so the curtains are still moving until they are gone */
+const REVEAL_LEAD_S = CURTAIN_FADE_MS / 1000
 /** If a video stalls, open anyway after this long */
 const VIDEO_TIMEOUT_MS = 10_000
 
@@ -19,6 +22,8 @@ interface CurtainProps {
   /** Called inside the click, so sound can start within the visitor's gesture */
   onEnter: (withSound: boolean) => void
   onSkip: () => void
+  /** The stage starts to show through: the push onto it begins */
+  onReveal: () => void
   onOpened: () => void
   video?: { src: string; poster?: string }
 }
@@ -27,7 +32,13 @@ interface CurtainProps {
 // CURTAIN — the closed curtain, the choice, and the opening
 // ==========================================
 
-const Curtain = ({ onEnter, onSkip, onOpened, video }: CurtainProps) => {
+const Curtain = ({
+  onEnter,
+  onSkip,
+  onReveal,
+  onOpened,
+  video,
+}: CurtainProps) => {
   const reduced = usePrefersReducedMotion()
   const [phase, setPhase] = useState<Phase>('closed')
   const [drawn, setDrawn] = useState(!video)
@@ -44,6 +55,7 @@ const Curtain = ({ onEnter, onSkip, onOpened, video }: CurtainProps) => {
     if (opened.current) return
     opened.current = true
     setPhase('fading')
+    onReveal()
     later(onOpened, CURTAIN_FADE_MS)
   }
 
@@ -76,6 +88,9 @@ const Curtain = ({ onEnter, onSkip, onOpened, video }: CurtainProps) => {
       openDrawn()
       return
     }
+    el.addEventListener('timeupdate', () => {
+      if (el.duration - el.currentTime <= REVEAL_LEAD_S) finish()
+    })
     el.addEventListener('ended', finish, { once: true })
     later(finish, VIDEO_TIMEOUT_MS)
     Promise.resolve(el.play()).catch(openDrawn)

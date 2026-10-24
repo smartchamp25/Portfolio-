@@ -102,8 +102,13 @@ without ever getting between a recruiter and the work.
 
 - After "Take your seat": the curtain video plays; the opening line
   _"And now… the curtain rises."_ plays in time with it and appears as a
-  surtitle. When the curtain is fully open the site fades in on the Prologue
-  (the current hero), and the music fades in over about 2 seconds and loops.
+  surtitle. While the curtains are still parting (the last 1.2 s of the clip),
+  the view pushes forward through the gap as the curtain dissolves, and the
+  Prologue (the current hero) plays its entrance on the stage behind it, with
+  the top bar arriving alongside. The page stays still and out of reach until
+  that moment. In the light theme the house lights come up: the curtain
+  brightens to the page as it clears. Once it is gone, the music fades in over
+  about 2 seconds and loops.
 - After "Enter without sound": the same curtain video plays silently, and the
   surtitle still appears.
 - A sound toggle (speaker icon, Fourth Act `IconButton`) stays in the top bar

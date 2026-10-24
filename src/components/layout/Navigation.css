@@ -8,7 +8,8 @@
   left: 0;
   right: 0;
   z-index: 100;
-  transition: opacity 600ms var(--ease-stage);
+  /* Arrives with the stage, as the curtain finishes clearing */
+  transition: opacity 700ms var(--ease-stage) 300ms;
 }
 
 /* Align the bar's contents with the page container */

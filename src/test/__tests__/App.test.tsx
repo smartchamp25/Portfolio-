@@ -102,15 +102,30 @@ describe('App curtain', () => {
     ).toBeInTheDocument()
   })
 
-  it('keeps the top bar hidden until the curtain has opened', () => {
-    renderAt('/')
+  it('brings the top bar in as the curtain reveals the stage', () => {
+    const { container } = renderAt('/')
     expect(screen.queryByRole('banner')).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Take your seat' }))
-    // The drawn curtain takes 3.2 s to open and 0.6 s to fade
+    // The drawn curtain takes 3.2 s to open, then reveals the stage
     act(() => vi.advanceTimersByTime(3000))
     expect(screen.queryByRole('banner')).not.toBeInTheDocument()
-    act(() => vi.advanceTimersByTime(1000))
+    act(() => vi.advanceTimersByTime(300))
+    expect(container.querySelector('.curtain')).toBeInTheDocument()
     expect(screen.getByRole('banner')).not.toHaveAttribute('inert')
+  })
+
+  it('keeps the stage still until the curtain reveals it', () => {
+    const { container } = renderAt('/')
+    const main = container.querySelector('main')!
+    fireEvent.click(screen.getByRole('button', { name: 'Take your seat' }))
+    act(() => vi.advanceTimersByTime(1000))
+    expect(main).toHaveAttribute('inert')
+    expect(container.querySelector('.portfolio--curtained')).toBeInTheDocument()
+    act(() => vi.advanceTimersByTime(2300))
+    expect(main).not.toHaveAttribute('inert')
+    expect(
+      container.querySelector('.portfolio--curtained')
+    ).not.toBeInTheDocument()
   })
 
   it('shows the top bar at once when the intro is skipped', () => {

@@ -37,8 +37,9 @@ const Performance = () => {
   const [curtain, setCurtain] = useState(
     () => pathname === '/' && !hasSeenCurtain()
   )
-  const [opening, setOpening] = useState(false)
-  const closed = curtain && !opening
+  // The stage stays dark and still until the curtain reveals it
+  const [revealed, setRevealed] = useState(false)
+  const closed = curtain && !revealed
 
   // Music is wanted whenever the stage is open (it plays once sound is on)
   useEffect(() => {
@@ -51,7 +52,6 @@ const Performance = () => {
   const enter = (withSound: boolean) => {
     setSoundOn(withSound)
     markCurtainSeen()
-    setOpening(true)
     say('curtain')
   }
 
@@ -70,7 +70,7 @@ const Performance = () => {
         active={scene.id}
         onNavigate={goTo}
         scrolled={scrolled}
-        hidden={curtain}
+        hidden={closed}
       />
 
       <main id="main" inert={closed}>
@@ -83,6 +83,7 @@ const Performance = () => {
         <Curtain
           onEnter={enter}
           onSkip={skip}
+          onReveal={() => setRevealed(true)}
           onOpened={() => setCurtain(false)}
           video={curtainVideo}
         />

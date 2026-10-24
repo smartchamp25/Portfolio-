@@ -11,11 +11,37 @@
   overflow: hidden;
   background: var(--void-deep);
   color: var(--ink);
-  transition: opacity 600ms var(--ease-stage);
+  /* The push onto the stage: through the gap as the curtain dissolves, so
+     the parted drapes sweep past the edges while still visible */
+  transition:
+    opacity 1200ms cubic-bezier(0.45, 0, 0.55, 1),
+    transform 1200ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .curtain--fading {
   opacity: 0;
+  transform: scale(2.2);
+}
+
+/* The page's own backdrop, read here because the curtain is always dark */
+:root {
+  --curtain-house: var(--void);
+}
+
+/* House lights: in the light theme the dark curtain brightens to the page
+   as it clears, instead of greying over it */
+.curtain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--curtain-house);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 700ms cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+:root[data-theme='light'] .curtain--fading::after {
+  opacity: 1;
 }
 
 /* Once opening, the page shows through and takes the clicks */
@@ -165,6 +191,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .curtain,
+  .curtain::after,
   .curtain__drape,
   .curtain__valance,
   .curtain__playbill {
